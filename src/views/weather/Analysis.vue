@@ -21,7 +21,14 @@
       >{{$t('chart.select.analysis')}}
       </el-button>
     </div>
-    <div id="chart" class="chart-item"></div>
+    <div
+      id="chart"
+      class="chart-item"
+      v-loading="loading"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0.8)"
+    ></div>
   </div>
 </template>
 
@@ -91,6 +98,7 @@ export default {
     },
 
     getHistoryData(deviceId, pageNum, pageSize) {
+      this.loading = true;
       this.historys.list = [];
       this.$http
         .get(`/datas/${deviceId}`, {
@@ -114,6 +122,7 @@ export default {
               }
             });
             this.chartDraw(this.historys);
+            this.loading = false;
           }
         })
         .catch();
@@ -205,15 +214,26 @@ export default {
               color: 'white',
             },
           },
+          axisTick: {
+            show: false,
+          },
         },
         yAxis: {
           splitLine: {
-            show: false,
+            show: true,
+            lineStyle: {
+              color: ['#315070'],
+              width: 1,
+              type: 'dotted',
+            },
           },
           axisLine: {
             lineStyle: {
               color: 'white',
             },
+          },
+          axisTick: {
+            show: false,
           },
         },
         toolbox: {

@@ -1,0 +1,72 @@
+{
+  "id": "1574731",
+  "name": "agricultural-platform",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-third-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "810183",
+      "name": "风向",
+      "font_class": "fengxiang",
+      "unicode": "e615",
+      "unicode_decimal": 58901
+    },
+    {
+      "icon_id": "1064047",
+      "name": "湿度",
+      "font_class": "shidu",
+      "unicode": "e6af",
+      "unicode_decimal": 59055
+    },
+    {
+      "icon_id": "2237365",
+      "name": "数据库",
+      "font_class": "database",
+      "unicode": "e624",
+      "unicode_decimal": 58916
+    },
+    {
+      "icon_id": "5581222",
+      "name": "温度",
+      "font_class": "wendu",
+      "unicode": "ead1",
+      "unicode_decimal": 60113
+    },
+    {
+      "icon_id": "5619083",
+      "name": "天气",
+      "font_class": "weather",
+      "unicode": "e64e",
+      "unicode_decimal": 58958
+    },
+    {
+      "icon_id": "7002583",
+      "name": "风速",
+      "font_class": "fengsu",
+      "unicode": "ec11",
+      "unicode_decimal": 60433
+    },
+    {
+      "icon_id": "7065375",
+      "name": "温室控制",
+      "font_class": "wenshikongzhi",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "9318506",
+      "name": "水",
+      "font_class": "shui",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "9871710",
+      "name": "气压",
+      "font_class": "qiya",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    }
+  ]
+}

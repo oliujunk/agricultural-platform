@@ -9,20 +9,20 @@
       style="height: 100%; background-color: rgba(0, 0, 0, 0); border: 0;"
     >
       <el-menu-item index="/weather" @click="$router.push('weather')">
-        <i class="el-icon-third-weather"></i>
+        <i class="icon-third-weather" style="margin-right: 8px; font-size: 14px;"></i>
         <span slot="title" class="title">{{$t('navMenu.weather')}}</span>
       </el-menu-item>
-      <el-menu-item index="/search" @click="$router.push('search')">
-        <i class="el-icon-third-wenshikongzhi"></i>
-        <span slot="title" class="title">{{$t('navMenu.greenhouse')}}</span>
-      </el-menu-item>
       <el-menu-item index="/fertilizer" @click="$router.push('fertilizer')">
-        <i class="el-icon-third-shui"></i>
+        <i class="icon-third-shui" style="margin-right: 10px;"></i>
         <span slot="title" class="title">{{$t('navMenu.fertilizer')}}</span>
       </el-menu-item>
       <el-menu-item index="/lysimeter" @click="$router.push('lysimeter')">
-        <i class="el-icon-third-database"></i>
+        <i class="icon-third-database" style="margin-right: 10px;"></i>
         <span slot="title" style="letter-spacing: 5px;">{{$t('navMenu.lysimeter')}}</span>
+      </el-menu-item>
+      <el-menu-item index="/video" @click="$router.push('video')">
+        <i class="el-icon-video-camera-solid" style="font-size: 20px;"></i>
+        <span slot="title" style="letter-spacing: 5px;">{{$t('navMenu.video')}}</span>
       </el-menu-item>
     </el-menu>
   </div>

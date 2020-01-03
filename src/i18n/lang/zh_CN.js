@@ -61,6 +61,7 @@ const zh_CN = {
     greenhouse: '温室控制',
     fertilizer: '水肥一体',
     lysimeter: '蒸 渗 仪',
+    video: '视频监控',
   },
 
   notify: {

@@ -251,14 +251,7 @@ export default {
             this.$forceUpdate();
           }
         })
-        .catch((error) => {
-          if (error.response) {
-            if (error.response.status === 403) {
-              sessionStorage.removeItem('username');
-              sessionStorage.removeItem('token');
-            }
-          }
-        });
+        .catch(error => console.log(error));
     },
     getDetail(elementNum) {
       const element = this.elementInfo;
@@ -455,8 +448,11 @@ export default {
     currentDeviceId() {
       if (this.currentDeviceId) {
         this.getDeviceInfo(this.currentDeviceId);
-        this.getDeviceData(this.currentDeviceId);
-        this.tableDraw(this.currentDeviceId);
+
+        setTimeout(() => {
+          this.getDeviceData(this.currentDeviceId);
+          this.tableDraw(this.currentDeviceId);
+        }, 500);
       }
     },
     dataRefresh() {
@@ -567,7 +563,7 @@ export default {
   margin: 0 5px 0 0;
   border: 0;
   border-radius: 0;
-  background-color: rgba(255, 255, 255, 0.4);
+  background-color: rgba(0, 0, 0, 0.5);
   color: white;
 }
 </style>

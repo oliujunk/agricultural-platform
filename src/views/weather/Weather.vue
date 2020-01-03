@@ -11,9 +11,6 @@
         <div :class="{'title': true, 'is-active': currentTab === 'analysis'}">
           <a @click="handleClickTitle('analysis')">数据分析</a>
         </div>
-        <div :class="{'title': true, 'is-active': currentTab === 'video'}">
-          <a @click="handleClickTitle('video')">视频监控</a>
-        </div>
       </div>
       <div class="search">
         <el-input v-model="searchKeyword" placeholder="请输入搜索关键字" size="small">
@@ -54,6 +51,7 @@ export default {
     handleClickTitle(name) {
       this.currentTab = name;
     },
+
     getDeviceList() {
       const username = sessionStorage.getItem('username');
       this.$http
@@ -80,43 +78,9 @@ export default {
           }
         });
     },
-
-    getElementInfo() {
-      this.$http
-        .get(`/element?lang=${this.$i18n.locale}`, {
-          headers: {
-            token: sessionStorage.getItem('token'),
-          },
-        })
-        .then((response) => {
-          if (response.status === 200) {
-            const { data } = response;
-            this.$store.commit('elementInfo', { elementInfo: data });
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-
-    getRelayInfo() {
-      this.$http
-        .get(`/relay?lang=${this.$i18n.locale}`, {
-          headers: {
-            token: sessionStorage.getItem('token'),
-          },
-        })
-        .then((response) => {
-          const { data } = response;
-          this.$store.commit('relayInfo', { relayInfo: data });
-        })
-        .catch(error => console.log(error));
-    },
   },
 
   mounted() {
-    this.getElementInfo();
-    this.getRelayInfo();
     this.getDeviceList();
     this.$store.commit('currentDeviceId', { currentDeviceId: 15112501 });
   },

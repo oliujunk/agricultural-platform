@@ -11,9 +11,6 @@
         <div :class="{'title': true, 'is-active': currentTab === 'analysis'}">
           <a @click="handleClickTitle('analysis')">数据分析</a>
         </div>
-        <div :class="{'title': true, 'is-active': currentTab === 'video'}">
-          <a @click="handleClickTitle('video')">视频监控</a>
-        </div>
       </div>
       <div class="search">
         <el-input v-model="searchKeyword" placeholder="请输入搜索关键字" size="small">
@@ -23,18 +20,24 @@
     </div>
     <div class="content">
       <Overview v-if="currentTab === 'home'"></Overview>
+      <Search v-else-if="currentTab === 'search'"></Search>
+      <Analysis v-else-if="currentTab === 'analysis'"></Analysis>
     </div>
   </div>
 </template>
 
 <script>
 import Overview from '@/views/fertilizer/Overview.vue';
+import Search from '@/views/fertilizer/Search.vue';
+import Analysis from '@/views/fertilizer/Analysis.vue';
 
 export default {
   name: 'fertilizer',
 
   components: {
     Overview,
+    Search,
+    Analysis,
   },
 
   data() {

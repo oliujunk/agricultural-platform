@@ -4,11 +4,11 @@ import Router from 'vue-router';
 const Weather = () => import('@/views/weather/Weather.vue');
 const Fertilizer = () => import('@/views/fertilizer/Fertilizer.vue');
 const Lysimeter = () => import('@/views/lysimeter/Lysimeter.vue');
-
-const Search = () => import('@/views/components/Search.vue');
+const Video = () => import('@/views/video/Video.vue');
 
 const Container = () => import('@/views/Container.vue');
 const Login = () => import('@/views/Login.vue');
+const Home = () => import('@/views/home/Home.vue');
 
 Vue.use(Router);
 
@@ -19,14 +19,28 @@ const router = new Router({
     {
       path: '/',
       name: 'container',
-      redirect: '/weather',
+      redirect: '/home',
       component: Container,
       children: [
         { path: '/weather', component: Weather },
-        { path: '/search', component: Search },
         { path: '/fertilizer', component: Fertilizer },
         { path: '/lysimeter', component: Lysimeter },
+        { path: '/video', component: Video },
       ],
+      beforeEnter: (to, from, next) => {
+        const username = sessionStorage.getItem('username');
+        const token = sessionStorage.getItem('token');
+        if (!username || !token) {
+          next({ path: '/login' });
+        } else {
+          next();
+        }
+      },
+    },
+    {
+      path: '/home',
+      name: 'home',
+      component: Home,
       beforeEnter: (to, from, next) => {
         const username = sessionStorage.getItem('username');
         const token = sessionStorage.getItem('token');
@@ -46,7 +60,7 @@ const router = new Router({
         const username = sessionStorage.getItem('username');
         const token = sessionStorage.getItem('token');
         if (username && token) {
-          next({ path: '/' });
+          next({ path: '/home' });
         } else {
           next();
         }

@@ -1,60 +1,20 @@
 <template>
   <div class="headbar">
-    <!-- <el-button
-      type="text"
-      :icon="$store.state.collapse ? 'el-icon-s-fold' : 'el-icon-s-unfold'"
-      @click="$store.commit('collapse')"
-      class="collapse-button"
-      style="font-size: 2em;"
-    ></el-button>
-
-    <div class="menu-bar">
+    <span class="title">新普惠智慧农业管理平台</span>
+    <div class="menu">
+      <el-button type="text" @click="$router.push('/')" style="margin-right: 30px; color: white;">{{$t('homePage.title')}}</el-button>
       <div class="user-dropdown">
         <i class="el-icon-user-solid"></i>
-        <el-dropdown trigger="click" style="margin-left: 10px;">
-          <span class="el-dropdown-link">
-            {{user}}
-            <i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
+        <el-dropdown style="margin-left: 10px;">
+          <span style="color: white;">{{user}}</span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>
-              <el-button type="text" icon="el-icon-third-logout" @click="logout">{{$t('headbar.logout')}}</el-button>
+              <el-button type="text" @click="logout">{{$t('headbar.logout')}}</el-button>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
-
-      <el-link
-        href="http://47.105.215.208:8080"
-        target="_blank"
-        :underline="false"
-        class="backstage-link"
-        type="primary"
-      >{{$t('headbar.loginBackend')}}</el-link>
-
-      <div class="language-select">
-        <i class="el-icon-third-language"></i>
-        <el-dropdown trigger="click" @command="handleLanguageChange" style="margin-left: 10px;">
-          <span class="el-dropdown-link">
-            {{$t('login.language')}}
-            <i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for="(item, index) in languageList" :key="index" :command="item.type">{{item.name}}</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </div>
-
-      <el-button
-        type="text"
-        :icon="fullScreen ? 'el-icon-third-tuichuquanping' : 'el-icon-third-quanping'"
-        class="fullscreen-button"
-        @click="handleToggleFullScreen"
-      ></el-button>
-
-    </div> -->
-    <span class="title">新普惠智慧农业管理平台</span>
-
+    </div>
   </div>
 </template>
 
@@ -166,6 +126,8 @@ export default {
   border-left-style: solid;
   background-color: rgba(0, 0, 0, 0.8);
   text-align: left;
+  display: flex;
+  justify-content: space-between;
 }
 
 .menu-bar {
@@ -201,5 +163,14 @@ export default {
   color: white;
   margin-left: 40px;
   font-size: 1.5em;
+}
+
+.menu {
+  display: flex;
+}
+
+.user-dropdown {
+  margin-right: 32px;
+  color: white;
 }
 </style>

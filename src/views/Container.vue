@@ -29,6 +29,7 @@ export default {
   flex-direction: column;
   height: 100%;
   width: 100%;
-  background: url('../assets/background1.jpg');
+  background: url('../assets/background1.jpg') no-repeat;
+  background-size: cover;
 }
 </style>

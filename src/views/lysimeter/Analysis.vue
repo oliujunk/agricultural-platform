@@ -1,33 +1,46 @@
 <template>
-  <div class="chart">
-    <DeviceList></DeviceList>
-    <div class="chart-container">
-      <div class="chart-select">
-        <el-date-picker
-          v-model="dateRange"
-          type="datetimerange"
-          :range-separator="$t('chart.select.rangeSeparator')"
-          :start-placeholder="$t('chart.select.startPlaceholder')"
-          :end-placeholder="$t('chart.select.endPlaceholder')"
-          class="date-range"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          @change="handleDateChange"
-        ></el-date-picker>
-        <el-button
-          type="primary"
-          icon="icon-third-fenxi"
-          @click="handleAnalysis"
-          :disabled="!searchReady"
-        >{{$t('chart.select.analysis')}}
-        </el-button>
-      </div>
-      <div id="chart" class="chart-item"></div>
+  <div class="chart-container">
+    <div class="chart-select">
+      <el-select v-model="currentDeviceId" size="mini">
+        <el-option
+          v-for="(item, index) in deviceList"
+          :key="index"
+          :label="item.facName"
+          :value="item.facId"
+        ></el-option>
+      </el-select>
+      <el-date-picker
+        v-model="dateRange"
+        type="datetimerange"
+        :range-separator="$t('chart.select.rangeSeparator')"
+        :start-placeholder="$t('chart.select.startPlaceholder')"
+        :end-placeholder="$t('chart.select.endPlaceholder')"
+        class="date-range"
+        value-format="yyyy-MM-dd HH:mm:ss"
+        @change="handleDateChange"
+        size="mini"
+      ></el-date-picker>
+      <el-button
+        type="primary"
+        icon="el-icon-more"
+        @click="handleAnalysis"
+        :disabled="!searchReady"
+        size="mini"
+      >{{$t('chart.select.analysis')}}
+      </el-button>
     </div>
+    <div
+      id="chart"
+      class="chart-item"
+      v-loading="loading"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0.8)"
+    ></div>
   </div>
 </template>
 
 <script>
-import DeviceList from './DeviceList.vue';
 
 const accMul = (arg1, arg2) => {
   let m = 0;
@@ -49,11 +62,7 @@ const accMul = (arg1, arg2) => {
 };
 
 export default {
-  name: 'chart',
-
-  components: {
-    DeviceList,
-  },
+  name: 'analysis',
 
   data() {
     return {
@@ -63,10 +72,30 @@ export default {
       dateRange: [],
       element: [],
       lineChart: null,
+      deviceIdList: [16065434, 16065430, 16065431, 16065432, 16065433],
+      currentDeviceId: 16065434,
+      deviceList: [],
     };
   },
 
   methods: {
+    getDeviceList() {
+      this.$http
+        .get(`/user/${sessionStorage.getItem('username')}`, {
+          headers: {
+            token: sessionStorage.getItem('token'),
+          },
+        })
+        .then((response) => {
+          if (response.data) {
+            const { devices } = response.data;
+            this.deviceList = this.deviceIdList.map(deviceId => devices.filter(item => item.facId === deviceId).pop());
+            this.currentDeviceId = this.deviceList[0].facId;
+          }
+        })
+        .catch();
+    },
+
     handleAnalysis() {
       this.$http
         .get(`/datas/${this.currentDeviceId}`, {
@@ -97,6 +126,7 @@ export default {
     },
 
     getHistoryData(deviceId, pageNum, pageSize) {
+      this.loading = true;
       this.historys.list = [];
       this.$http
         .get(`/datas/${deviceId}`, {
@@ -120,6 +150,7 @@ export default {
               }
             });
             this.chartDraw(this.historys);
+            this.loading = false;
           }
         })
         .catch();
@@ -185,18 +216,51 @@ export default {
         series.push({ type: 'line', smooth: true, symbol: 'none' });
       }
       const options = {
-        backgroundColor: '#F2F6FC',
+        backgroundColor: 'rgba(0, 0, 0, 0.2)',
+        textStyle: {
+          color: 'white',
+        },
         tooltip: {
           trigger: 'axis',
         },
         legend: {
           formatter: name => name.substring(0, name.indexOf('(')),
+          textStyle: {
+            color: 'white',
+          },
+        },
+        grid: {
+          left: 100,
+          top: 50,
+          right: 100,
+          bottom: 70,
         },
         xAxis: {
           data: data.map(item => item.dataTime),
+          axisLine: {
+            lineStyle: {
+              color: 'white',
+            },
+          },
+          axisTick: {
+            show: false,
+          },
         },
         yAxis: {
           splitLine: {
+            show: true,
+            lineStyle: {
+              color: ['#315070'],
+              width: 1,
+              type: 'dotted',
+            },
+          },
+          axisLine: {
+            lineStyle: {
+              color: 'white',
+            },
+          },
+          axisTick: {
             show: false,
           },
         },
@@ -216,10 +280,17 @@ export default {
             type: 'slider',
             show: true,
             xAxisIndex: [0],
-          },
-          {
-            type: 'inside',
-            xAxisIndex: [0],
+            backgroundColor: 'rgba(0, 0, 0, 0.4)',
+            fillerColor: 'rgba(255, 255, 255, 0.5)',
+            dataBackground: {
+              lineStyle: { color: 'white' },
+              areaStyle: { color: 'white' },
+            },
+            textStyle: {
+              color: 'white',
+            },
+            left: 130,
+            right: 130,
           },
         ],
         dataset: {
@@ -241,6 +312,7 @@ export default {
   },
 
   mounted() {
+    this.getDeviceList();
     this.lineChart = echarts.init(document.getElementById('chart'), 'light');
 
     if (this.currentDeviceId) {
@@ -254,9 +326,6 @@ export default {
   },
 
   computed: {
-    currentDeviceId() {
-      return this.$store.state.currentDeviceId;
-    },
     elementInfo() {
       return this.$store.state.elementInfo;
     },
@@ -273,43 +342,35 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.chart {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  overflow-y: auto;
-  right: 0;
-}
-
+<style scoped>
 .chart-container {
   display: flex;
   flex-direction: column;
-  width: 90%;
+  height: 100%;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
 .chart-select {
   display: flex;
   justify-content: flex-end;
-  margin: 5px;
-  float: right;
   min-height: 40px;
-  max-width: 1500px;
-  margin: 5px;
-  .date-range {
-    margin-left: 10px;
-    margin-right: 10px;
-  }
+  margin-right: 16px;
+  margin-top: 10px;
+}
+.chart-select .date-range {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.chart-select .el-button {
+  height: 27px;
 }
 
 .chart-item {
   width: 100%;
   height: 90%;
   text-align: left;
-}
-
-.el-button {
-  height: 40px;
 }
 
 </style>

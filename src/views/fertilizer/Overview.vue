@@ -32,7 +32,7 @@
                 <el-radio-button label="灌溉实验区"></el-radio-button>
               </el-radio-group>
             </div>
-            <div class="center">
+            <div class="center" v-if="blockType === '作物种植区'">
               <div class="center-top">
                 <div
                   class="orchard-block"
@@ -91,7 +91,10 @@
                     </div>
                   </div>
                   <div class="bottom">
-                    <div class="experimental-block">
+                    <div
+                      class="experimental-block"
+                      @click.capture="blockType = '灌溉实验区'"
+                    >
                       <div style="margin-top: 70px;">灌溉实验区</div>
                       <div>点击进入</div>
                     </div>
@@ -133,6 +136,42 @@
                 </div>
               </div>
             </div>
+            <div class="irrigate" v-else-if="blockType === '灌溉实验区'">
+              <div class="irrigate-top">
+                <div
+                  class="irrigate-block"
+                  v-for="index in 10"
+                  :key="index"
+                  @click.capture="handleClickBlock(sequence[index + 25] + 13, relayStateBit[sequence[index + 25] + 13])"
+                  :style="relayStateBit[sequence[index + 25] + 13] === 1 ? 'background-color: #f97c85;' : 'background-color: #0cc58f;'"
+                  v-loading="relayLoading[sequence[index + 25] + 13]"
+                  element-loading-text="拼命加载中"
+                  element-loading-spinner="el-icon-loading"
+                  element-loading-background="rgba(0, 0, 0, 0.5)"
+                >
+                  <div class="irrigate-name">大田实验区</div>
+                  <div class="irrigate-value" v-if="dataName === '土湿' && node[sequence[index + 25] * 2]">{{dataName}}：{{node[sequence[index + 25] * 2].eValue + ' %'}}</div>
+                  <div class="irrigate-value" v-else-if="dataName === '流量' && node[sequence[index + 25] * 2 + 1]">{{dataName}}：{{node[sequence[index + 25] * 2 + 1].eValue + ' m3'}}</div>
+                </div>
+              </div>
+              <div class="irrigate-bottom">
+                <div
+                  class="irrigate-block"
+                  v-for="index in 10"
+                  :key="index"
+                  @click.capture="handleClickBlock(sequence[index + 35] + 13, relayStateBit[sequence[index + 35] + 13])"
+                  :style="relayStateBit[sequence[index + 35] + 13] === 1 ? 'background-color: #f97c85;' : 'background-color: #0cc58f;'"
+                  v-loading="relayLoading[sequence[index + 35] + 13]"
+                  element-loading-text="拼命加载中"
+                  element-loading-spinner="el-icon-loading"
+                  element-loading-background="rgba(0, 0, 0, 0.5)"
+                >
+                  <div class="irrigate-name">大田实验区</div>
+                  <div class="irrigate-value" v-if="dataName === '土湿' && node[sequence[index + 35] * 2]">{{dataName}}：{{node[sequence[index + 35] * 2].eValue + ' %'}}</div>
+                  <div class="irrigate-value" v-else-if="dataName === '流量' && node[sequence[index + 35] * 2 + 1]">{{dataName}}：{{node[sequence[index + 35] * 2 + 1].eValue + ' m3'}}</div>
+                </div>
+              </div>
+            </div>
           </el-col>
           <el-col :span="5">
             <div class="right">
@@ -169,13 +208,15 @@ export default {
       fertilizerButtonName: ['施肥阀1', '施肥阀2', '施肥阀3', '施肥阀4', '施肥泵', '主水泵', '', '', '', '搅拌机1', '搅拌机2', '搅拌机3', '搅拌机4'],
       nodeName1: ['核桃园', '石榴园', '石榴园', '樱桃园', '樱桃园', '樱桃园', '苹果园', '苹果园', '梨园', '山楂园', '杏园'],
       nodeName2: ['走廊', '日光温室', '温控日光温室', '双层面日光温室'],
-      node: [],
+      node: new Array(100),
       sequence: [
         0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
         11, 12, 13, 14,
         15, 16, 17, 18,
         19, 20, 21, 22,
         23, 24, 25,
+        26, 27, 28, 29, 30, 31, 32, 33, 34, 35,
+        36, 37, 38, 39, 40, 41, 42, 43, 44, 45,
       ],
       element: [],
       relayStateByte: [],
@@ -212,23 +253,25 @@ export default {
     },
     getElementData() {
       this.$http
-        .get('http://localhost:8005/intfa/queryData/16065208')
+        .get('/intfa/queryData/16065208')
         .then((response) => {
           if (response.data) {
             this.element = response.data.entity.slice(0, 4);
-            this.node.splice(0, 0, ...response.data.entity.slice(4, 14));
+            this.node.splice(0, 4, ...response.data.entity.slice(4, 14));
           }
         })
         .catch();
       for (let i = 0; i < 6; i += 1) {
-        this.$http
-          .get(`http://localhost:8005/intfa/queryData/${19112991 + i}`)
-          .then((response) => {
-            if (response.data) {
-              this.node.splice(10 + i * 16, 0, ...response.data.entity.slice(0, 16));
-            }
-          })
-          .catch();
+        setTimeout(() => {
+          this.$http
+            .get(`/intfa/queryData/${19112991 + i}`)
+            .then((response) => {
+              if (response.data) {
+                this.node.splice(10 + i * 16, 16, ...response.data.entity.slice(0, 16));
+              }
+            })
+            .catch();
+        }, 100 * i);
       }
     },
     getRelayState(deviceId) {
@@ -515,6 +558,48 @@ export default {
 
 .center-bottom-right .right .block:first-child {
   margin-top: 60px;
+}
+
+.irrigate {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  margin-left: 10px;
+}
+.irrigate-top {
+  width: 925px;
+  height: 273px;
+  border: 4px solid white;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.irrigate-bottom {
+  width: 925px;
+  height: 273px;
+  border: 4px solid white;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 60px;
+}
+.irrigate-block {
+  width: 85px;
+  height: 260px;
+  background-color: #0cc58f;
+  text-align: center;
+  user-select: none;
+}
+.irrigate-block:hover {
+  cursor: pointer;
+}
+.irrigate-block .irrigate-name {
+  margin-top: 90px;
+  font-size: 16px;
+}
+.irrigate-block .irrigate-value {
+  margin-top: 15px;
+  font-size: 14px;
 }
 
 .right {

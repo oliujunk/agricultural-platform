@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-header style="text-align: right; margin-top: 20px; margin-right: 20px;">
-      <i class="el-icon-third-language"></i>
+      <i class="icon-third-language"></i>
       <el-dropdown trigger="click" @command="handleLanguageChange" style="margin-left: 10px; cursor: pointer;">
         <span class="el-dropdown-link">
           {{$t('login.language')}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -87,7 +87,7 @@ export default {
           if (response.data.token) {
             sessionStorage.setItem('username', this.loginForm.username);
             sessionStorage.setItem('token', response.data.token);
-            this.$router.push('/');
+            this.$router.push('/home');
           } else {
             this.$message.error(this.$t('login.loginUsernameError'));
           }
