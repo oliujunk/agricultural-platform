@@ -78,6 +78,8 @@
 </template>
 
 <script>
+const bigdecimal = require('bigdecimal');
+
 const accMul = (arg1, arg2) => {
   let m = 0;
   if ((arg1 || arg1 === 0) && (arg2 || arg2 === 0)) {
@@ -159,11 +161,20 @@ export default {
           const { element } = this;
           if (response.status === 200) {
             this.historys = response.data;
-            this.historys.forEach((item) => {
-              for (let i = 0, len = element.length; i < len; i += 1) {
-                item[[element[i].ch]] = accMul(item[element[i].ch], parseFloat(element[i].prec));
-              }
-            });
+            if (deviceId === 16065434) {
+              this.historys.forEach((item) => {
+                item.e1 = new bigdecimal.BigDecimal(`${item.e9}.${item.e10}`).toString();
+                item.e2 = new bigdecimal.BigDecimal(`${item.e11}.${item.e12}`).toString();
+                item.e3 = new bigdecimal.BigDecimal(`${item.e13}.${item.e14}`).toString();
+                item.e4 = new bigdecimal.BigDecimal(`${item.e15}.${item.e16}`).toString();
+              });
+            } else {
+              this.historys.forEach((item) => {
+                for (let i = 0, len = element.length; i < len; i += 1) {
+                  item[[element[i].ch]] = accMul(item[element[i].ch], parseFloat(element[i].prec));
+                }
+              });
+            }
           }
           this.tableLoading = false;
         })
@@ -253,14 +264,24 @@ export default {
             const eleNum = response.data.eleNum.split('/');
             const eleName = response.data.eleName.split('/');
             const element = [];
-            for (let i = 0; i < 16; i += 1) {
-              if (eleNum[i] === '100') continue;
-              const detail = this.getDetail(eleNum[i]);
-              if (eleName[i] !== '-') {
-                detail.name = eleName[i];
+            if (deviceId === 16065434) {
+              for (let i = 0; i < 4; i += 1) {
+                const detail = {};
+                detail.name = `蒸发桶${i + 1}`;
+                detail.ch = `e${i + 1}`;
+                detail.unit = 'Kg';
+                element.push(detail);
               }
-              detail.ch = `e${i + 1}`;
-              element.push(detail);
+            } else {
+              for (let i = 0; i < 16; i += 1) {
+                if (eleNum[i] === '100') continue;
+                const detail = this.getDetail(eleNum[i]);
+                if (eleName[i] !== '-') {
+                  detail.name = eleName[i];
+                }
+                detail.ch = `e${i + 1}`;
+                element.push(detail);
+              }
             }
             this.element = element;
           }

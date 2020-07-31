@@ -104,7 +104,7 @@
             <div class="weather-element-icon">
               <i class="icon-third-wendu" style="font-size: 50px; margin-left: 5px;"></i>
             </div>
-            <div>25.2 ℃</div>
+            <div>{{weather.temperature}} ℃</div>
             <div>温度</div>
             <div>Temperature</div>
           </div>
@@ -112,7 +112,7 @@
             <div class="weather-element-icon">
               <i class="icon-third-shidu" style="font-size: 50px; margin-left: 5px;"></i>
             </div>
-            <div>45.3 %RH</div>
+            <div>{{weather.humidity}} %RH</div>
             <div>湿度</div>
             <div>Humidity</div>
           </div>
@@ -163,7 +163,7 @@
         <span class="top-right"></span>
         <span class="bottom-left"></span>
         <span class="bottom-right"></span>
-        <div class="title">蒸渗仪</div>
+        <div class="title">气象曲线</div>
         <div id="chart"></div>
       </div>
       <div class="notification">
@@ -212,12 +212,68 @@
         </div>
       </div>
       <div class="video1">
+        <video
+          id="video1"
+          controls
+          style="object-fit: fill;"
+          webkit-playsinline
+          playsinline
+          x-webkit-airplay="allow"
+          x5-video-player-type="h5"
+          x5-video-player-fullscreen="true"
+          x5-video-orientation="portraint"
+          class="video-content"
+          autoplay="autoplay"
+          muted="muted"
+        ></video>
       </div>
       <div class="video2">
+        <video
+          id="video2"
+          controls
+          style="object-fit: fill;"
+          webkit-playsinline
+          playsinline
+          x-webkit-airplay="allow"
+          x5-video-player-type="h5"
+          x5-video-player-fullscreen="true"
+          x5-video-orientation="portraint"
+          class="video-content"
+          autoplay="autoplay"
+          muted="muted"
+        ></video>
       </div>
       <div class="video3">
+        <video
+          id="video3"
+          controls
+          style="object-fit: fill;"
+          webkit-playsinline
+          playsinline
+          x-webkit-airplay="allow"
+          x5-video-player-type="h5"
+          x5-video-player-fullscreen="true"
+          x5-video-orientation="portraint"
+          class="video-content"
+          autoplay="autoplay"
+          muted="muted"
+        ></video>
       </div>
       <div class="video4">
+        <video
+          id="video4"
+          controls
+          style="object-fit: fill;"
+          webkit-playsinline
+          playsinline
+          x-webkit-airplay="allow"
+          x5-video-player-type="h5"
+          x5-video-player-fullscreen="true"
+          x5-video-orientation="portraint"
+          class="video-content"
+          autoplay="autoplay"
+          muted="muted"
+        ></video>
       </div>
     </div>
   </div>
@@ -263,11 +319,11 @@ export default {
       websocket: null,
       notification: [
         {
-          time: '2019-12-23 08:00:00', deviceId: 15112501, type: '阈值报警', message: '通道1大于设定的阈值42',
+          time: '2019-12-23 08:00:00', deviceId: 16062693, type: '阈值报警', message: '通道1大于设定的阈值42',
         },
-        { time: '2019-12-23 08:00:00', deviceId: 15112501, type: '阈值拍照' },
-        { time: '2019-12-23 08:00:00', deviceId: 15112501, type: '阈值控制' },
-        { time: '2019-12-23 08:00:00', deviceId: 15112501, type: '拍照完成' },
+        { time: '2019-12-23 08:00:00', deviceId: 16062693, type: '阈值拍照' },
+        { time: '2019-12-23 08:00:00', deviceId: 16062693, type: '阈值控制' },
+        { time: '2019-12-23 08:00:00', deviceId: 16062693, type: '拍照完成' },
       ],
       operator: (arg) => {
         let ret = '';
@@ -292,6 +348,11 @@ export default {
         }
         return ret;
       },
+      weather: {},
+      flvPlayer1: null,
+      flvPlayer2: null,
+      flvPlayer3: null,
+      flvPlayer4: null,
     };
   },
 
@@ -324,6 +385,13 @@ export default {
 
     handleClickEntry(name) {
       this.$router.push(`/${name}`);
+      switch (name) {
+        case 'weather':
+          this.$store.commit('currentDeviceId', { currentDeviceId: 16065522 });
+          break;
+        default:
+          break;
+      }
     },
 
     updateDatetime() {
@@ -561,7 +629,7 @@ export default {
     },
 
     websocketOnOpen() {
-      this.websocket.send(JSON.stringify({ deviceId: 15112501 }));
+      this.websocket.send(JSON.stringify({ deviceId: 16062693 }));
     },
 
     websocketOnMessage(e) {
@@ -641,6 +709,62 @@ export default {
       console.log('断开连接', e);
     },
 
+    getWeather(deviceId) {
+      this.$http
+        .get(`http://47.105.215.208:8005/intfa/queryData/${deviceId}`)
+        .then((res) => {
+          if (res.data) {
+            this.weather.temperature = res.data.entity[2].eValue;
+            this.weather.humidity = res.data.entity[3].eValue;
+          }
+        })
+        .catch();
+    },
+
+    videoLoad() {
+      if (flvjs.isSupported()) {
+        const video1 = document.getElementById('video1');
+        const flvPlayer1 = flvjs.createPlayer({
+          type: 'flv',
+          url: 'https://flvopen.ys7.com:9188/openlive/875dd26d043a43419b87fb4659bf31c9.flv', // 1
+        });
+        flvPlayer1.attachMediaElement(video1);
+        flvPlayer1.load();
+        flvPlayer1.play();
+
+        const video2 = document.getElementById('video2');
+        const flvPlayer2 = flvjs.createPlayer({
+          type: 'flv',
+          url: 'https://flvopen.ys7.com:9188/openlive/e7b16a2e14e74d6789de91714f9ccae1.hd.flv', // 6
+        });
+        flvPlayer2.attachMediaElement(video2);
+        flvPlayer2.load();
+        flvPlayer2.play();
+
+        const video3 = document.getElementById('video3');
+        const flvPlayer3 = flvjs.createPlayer({
+          type: 'flv',
+          url: 'https://flvopen.ys7.com:9188/openlive/e38f93f52d9d4dc29abb21a035d800dc.flv', // 17
+        });
+        flvPlayer3.attachMediaElement(video3);
+        flvPlayer3.load();
+        flvPlayer3.play();
+
+        const video4 = document.getElementById('video4');
+        const flvPlayer4 = flvjs.createPlayer({
+          type: 'flv',
+          url: 'https://flvopen.ys7.com:9188/openlive/034a740930cf4722ac7569d9236eefdf.flv', // 18
+        });
+        flvPlayer4.attachMediaElement(video4);
+        flvPlayer4.load();
+        flvPlayer4.play();
+        this.flvPlayer1 = flvPlayer1;
+        this.flvPlayer2 = flvPlayer2;
+        this.flvPlayer3 = flvPlayer3;
+        this.flvPlayer4 = flvPlayer4;
+      }
+    },
+
   },
 
   mounted() {
@@ -654,9 +778,17 @@ export default {
     window.onresize = () => {
       this.lineChart.resize();
     };
-    this.getDeviceInfo(15112501);
-    this.getHistoryData(15112501, 1, 10);
-    this.getControlLog(15112501, 1, 5);
+    this.getDeviceInfo(16062693);
+    // this.getHistoryData(16062693, 1, 10);
+    setTimeout(() => {
+      this.getHistoryData(16062693, 1, 10);
+    }, 2000);
+    this.getControlLog(16062693, 1, 5);
+
+    setInterval(() => {
+      this.getWeather(16062693);
+    }, 10000);
+    this.videoLoad();
   },
 
   computed: {
@@ -666,6 +798,23 @@ export default {
     relayInfo() {
       return this.$store.state.relayInfo;
     },
+  },
+  beforeDestroy() {
+    this.flvPlayer1.pause();
+    this.flvPlayer1.unload();
+    this.flvPlayer1.detachMediaElement();
+
+    this.flvPlayer2.pause();
+    this.flvPlayer2.unload();
+    this.flvPlayer2.detachMediaElement();
+
+    this.flvPlayer3.pause();
+    this.flvPlayer3.unload();
+    this.flvPlayer3.detachMediaElement();
+
+    this.flvPlayer4.pause();
+    this.flvPlayer4.unload();
+    this.flvPlayer4.detachMediaElement();
   },
 };
 </script>
@@ -980,6 +1129,11 @@ export default {
   background: #e08982;
   margin-left: 5%;
   margin-top: 2%;
+}
+
+.video-content {
+  width: 100%;
+  height: 100%;
 }
 
 .video1 {

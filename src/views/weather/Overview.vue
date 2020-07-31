@@ -55,7 +55,7 @@
             </div>
             <el-card :body-style="{ padding: '0px' }" class="device-cover">
               <img v-if="device && device.coverUrl" :src="device.coverUrl" style="width: 100%; height: 240px;">
-              <img v-else src="http://47.105.215.208:8081/images/onstage/login_bg.jpg">
+              <img v-else src="http://47.105.215.208:8081/images/onstage/login_bg.jpg" style="width: 100%; height: 240px;">
               <div style="display: flex; padding-left: 10px; justify-content: space-between;">
                 <div>
                   <div style="text-align: left;">{{$t('home.overview.deviceName')}}{{ device.facName }}</div>
@@ -247,6 +247,9 @@ export default {
                 this.relayExtendLoading.push(false);
               }
               this.relayExtendElement = relayExtendElement;
+            } else {
+              this.relayExtendLoading = [];
+              this.relayExtendElement = [];
             }
             this.$forceUpdate();
           }
@@ -418,9 +421,11 @@ export default {
   mounted() {
     this.token = sessionStorage.getItem('token');
     if (this.currentDeviceId) {
-      this.getDeviceInfo(this.currentDeviceId);
-      this.getDeviceData(this.currentDeviceId);
-      this.tableDraw(this.currentDeviceId);
+      setTimeout(() => {
+        this.getDeviceInfo(this.currentDeviceId);
+        this.getDeviceData(this.currentDeviceId);
+        this.tableDraw(this.currentDeviceId);
+      }, 1000);
     }
   },
 

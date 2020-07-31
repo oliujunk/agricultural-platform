@@ -78,11 +78,46 @@ export default {
           }
         });
     },
+
+    getElementInfo() {
+      this.$http
+        .get(`/element?lang=${this.$i18n.locale}`, {
+          headers: {
+            token: sessionStorage.getItem('token'),
+          },
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            const { data } = response;
+            this.$store.commit('elementInfo', { elementInfo: data });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+    getRelayInfo() {
+      this.$http
+        .get(`/relay?lang=${this.$i18n.locale}`, {
+          headers: {
+            token: sessionStorage.getItem('token'),
+          },
+        })
+        .then((response) => {
+          const { data } = response;
+          this.$store.commit('relayInfo', { relayInfo: data });
+        })
+        .catch(error => console.log(error));
+    },
+
   },
 
   mounted() {
+    this.getElementInfo();
+    this.getRelayInfo();
     this.getDeviceList();
-    this.$store.commit('currentDeviceId', { currentDeviceId: 15112501 });
+    // this.$store.commit('currentDeviceId', { currentDeviceId: 16062693 });
   },
 
   computed: {
@@ -106,6 +141,11 @@ export default {
   },
 
   watch: {
+    currentDeviceId() {
+      this.getElementInfo();
+      this.getRelayInfo();
+      this.getDeviceList();
+    },
   },
 
   beforeDestroy() {

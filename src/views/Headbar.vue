@@ -1,6 +1,6 @@
 <template>
   <div class="headbar">
-    <span class="title">新普惠智慧农业管理平台</span>
+    <span class="title">山东省气象局泰安农业气象试验基地物联网管理平台</span>
     <div class="menu">
       <el-button type="text" @click="$router.push('/')" style="margin-right: 30px; color: white;">{{$t('homePage.title')}}</el-button>
       <div class="user-dropdown">

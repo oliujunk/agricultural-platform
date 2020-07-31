@@ -115,7 +115,7 @@ export default {
     this.getElementInfo();
     this.getRelayInfo();
     this.getDeviceList();
-    this.$store.commit('currentDeviceId', { currentDeviceId: 15112501 });
+    this.$store.commit('currentDeviceId', { currentDeviceId: 16065434 });
   },
 
   computed: {

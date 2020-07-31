@@ -19,16 +19,17 @@
                 :class="{'bucket-first': index === 1, 'bucket-second': index === 2, 'bucket-third': index === 3, 'bucket-fourth': index === 4}"
               >
                 <span class="value1" v-if="bucket[index + 3]">土湿：{{bucket[index + 3].eValue}} %</span>
-                <span class="value2" v-if="bucket[index - 1]">热通量：{{bucket[index - 1].eValue}} W/m2</span>
+                <!-- <span class="value2" v-if="bucket[index - 1]">热通量：{{bucket[index - 1].eValue}} W/m2</span> -->
               </div>
               <div class="weight"></div>
               <div style="display: flex;">
                 <div class="weight-value">
-                  <span>{{totalWeight[0]}} Kg</span>
+                  <span>{{weightChange[0]}} Kg</span>
                 </div>
                 <div class="rain-value">
-                  <span v-if="top[0] === '32767'">------ mm</span>
-                  <span v-else-if="top[0]">{{top[0].eValue}} mm</span>
+                  <!-- <span v-if="top[0] === '32767'">------ mm</span>
+                  <span v-else-if="top[0]">{{top[0].eValue}} mm</span> -->
+                  <span v-if="leakage[0]">{{leakage[0]}} mm</span>
                 </div>
               </div>
             </el-col>
@@ -44,16 +45,17 @@
                 :class="{'bucket-first': index === 1, 'bucket-second': index === 2, 'bucket-third': index === 3, 'bucket-fourth': index === 4}"
               >
                 <span class="value1" v-if="bucket[index + 3 + 8]">土湿：{{bucket[index + 3 + 8].eValue}} %</span>
-                <span class="value2" v-if="bucket[index - 1 + 8]">热通量：{{bucket[index - 1 + 8].eValue}} W/m2</span>
+                <!-- <span class="value2" v-if="bucket[index - 1 + 8]">热通量：{{bucket[index - 1 + 8].eValue}} W/m2</span> -->
               </div>
               <div class="weight"></div>
               <div style="display: flex;">
                 <div class="weight-value">
-                  <span>{{totalWeight[1]}} Kg</span>
+                  <span>{{weightChange[1]}} Kg</span>
                 </div>
                 <div class="rain-value">
-                  <span v-if="top[4] === '32767'">------ mm</span>
-                  <span v-else-if="top[4]">{{top[4].eValue}} mm</span>
+                  <!-- <span v-if="top[4] === '32767'">------ mm</span>
+                  <span v-else-if="top[4]">{{top[4].eValue}} mm</span> -->
+                  <span v-if="leakage[1]">{{leakage[1]}} mm</span>
                 </div>
               </div>
             </el-col>
@@ -69,16 +71,17 @@
                 :class="{'bucket-first': index === 1, 'bucket-second': index === 2, 'bucket-third': index === 3, 'bucket-fourth': index === 4}"
               >
                 <span class="value1" v-if="bucket[index + 3 + 16]">土湿：{{bucket[index + 3 + 16].eValue}} %</span>
-                <span class="value2" v-if="bucket[index - 1 + 16]">热通量：{{bucket[index - 1 + 16].eValue}} W/m2</span>
+                <!-- <span class="value2" v-if="bucket[index - 1 + 16]">热通量：{{bucket[index - 1 + 16].eValue}} W/m2</span> -->
               </div>
               <div class="weight"></div>
               <div style="display: flex;">
                 <div class="weight-value">
-                  <span>{{totalWeight[2]}} Kg</span>
+                  <span>{{weightChange[2]}} Kg</span>
                 </div>
                 <div class="rain-value">
-                  <span v-if="top[8] === '32767'">------ mm</span>
-                  <span v-else-if="top[8]">{{top[8].eValue}} mm</span>
+                  <!-- <span v-if="top[8] === '32767'">------ mm</span>
+                  <span v-else-if="top[8]">{{top[8].eValue}} mm</span> -->
+                  <span v-if="leakage[2]">{{leakage[2]}} mm</span>
                 </div>
               </div>
             </el-col>
@@ -94,16 +97,17 @@
                 :class="{'bucket-first': index === 1, 'bucket-second': index === 2, 'bucket-third': index === 3, 'bucket-fourth': index === 4}"
               >
                 <span class="value1" v-if="bucket[index + 3 + 24]">土湿：{{bucket[index + 3 + 24].eValue}} %</span>
-                <span class="value2" v-if="bucket[index - 1 + 24]">热通量：{{bucket[index - 1 + 24].eValue}} W/m2</span>
+                <!-- <span class="value2" v-if="bucket[index - 1 + 24]">热通量：{{bucket[index - 1 + 24].eValue}} W/m2</span> -->
               </div>
               <div class="weight"></div>
               <div style="display: flex;">
                 <div class="weight-value">
-                  <span>{{totalWeight[3]}} Kg</span>
+                  <span>{{weightChange[3]}} Kg</span>
                 </div>
                 <div class="rain-value">
-                  <span v-if="top[12] === '32767'">------ mm</span>
-                  <span v-else-if="top[12]">{{top[12].eValue}} mm</span>
+                  <!-- <span v-if="top[12] === '32767'">------ mm</span>
+                  <span v-else-if="top[12]">{{top[12].eValue}} mm</span> -->
+                  <span v-if="leakage[3]">{{leakage[3]}} mm</span>
                 </div>
               </div>
             </el-col>
@@ -127,19 +131,21 @@
           >
             <el-table-column prop="name" label="桶标号" align="center"></el-table-column>
             <el-table-column prop="time" width="140" label="时间" align="center"></el-table-column>
-            <el-table-column prop="e1" label="土湿1" align="center"></el-table-column>
-            <el-table-column prop="e2" label="土湿2" align="center"></el-table-column>
-            <el-table-column prop="e3" label="土湿3" align="center"></el-table-column>
-            <el-table-column prop="e4" label="第一层热通量" align="center"></el-table-column>
-            <el-table-column prop="e5" label="第二层热通量" align="center"></el-table-column>
-            <el-table-column prop="e6" label="第三层热通量" align="center"></el-table-column>
-            <el-table-column prop="e7" label="第四层热通量" align="center"></el-table-column>
-            <el-table-column prop="e8" label="第一层土湿" align="center"></el-table-column>
-            <el-table-column prop="e9" label="第二层土湿" align="center"></el-table-column>
-            <el-table-column prop="e10" label="第三层土湿" align="center"></el-table-column>
-            <el-table-column prop="e11" label="第四层土湿" align="center"></el-table-column>
-            <el-table-column prop="e13" label="重量" align="center"></el-table-column>
-            <el-table-column prop="e12" label="渗漏" align="center"></el-table-column>
+            <el-table-column prop="e13" label="重量(Kg)" align="center"></el-table-column>
+            <el-table-column prop="e14" label="重量变化(Kg)" align="center"></el-table-column>
+            <el-table-column prop="e15" label="渗漏(mm)" align="center"></el-table-column>
+            <el-table-column prop="e4" label="第一层热通量(W/m2)" align="center"></el-table-column>
+            <el-table-column prop="e5" label="第二层热通量(W/m2)" align="center"></el-table-column>
+            <el-table-column prop="e6" label="第三层热通量(W/m2)" align="center"></el-table-column>
+            <el-table-column prop="e7" label="第四层热通量(W/m2)" align="center"></el-table-column>
+            <el-table-column prop="e1" label="土湿1(%RH)" align="center"></el-table-column>
+            <el-table-column prop="e2" label="土湿2(%RH)" align="center"></el-table-column>
+            <el-table-column prop="e3" label="土湿3(%RH)" align="center"></el-table-column>
+            <el-table-column prop="e8" label="第一层土湿(%RH)" align="center"></el-table-column>
+            <el-table-column prop="e9" label="第二层土湿(%RH)" align="center"></el-table-column>
+            <el-table-column prop="e10" label="第三层土湿(%RH)" align="center"></el-table-column>
+            <el-table-column prop="e11" label="第四层土湿(%RH)" align="center"></el-table-column>
+            <!-- <el-table-column prop="e12" label="渗漏" align="center"></el-table-column> -->
           </el-table>
         </div>
       </div>
@@ -158,8 +164,11 @@ export default {
       checkList: [0, 1, 2, 3],
       dataTable: [],
       showDataTable: [],
-      weight: [],
-      totalWeight: [],
+      weight: new Array(8),
+      totalWeight: new Array(4),
+      backTotalWeight: new Array(4),
+      weightChange: new Array(4),
+      leakage: new Array(4),
       top: new Array(16),
       bucket: new Array(32),
     };
@@ -173,17 +182,20 @@ export default {
           if (response.data) {
             for (let i = 0; i < 8; i += 1) {
               if (response.data.entity[0 + i * 2].eValue === '32767' || response.data.entity[1 + i * 2].eValue === '32767') {
-                this.weight.push('32767');
+                this.weight[i] = '32767';
               } else {
-                this.weight.push(new bigdecimal.BigDecimal(`${response.data.entity[0 + i * 2].eValue}.${response.data.entity[1 + i * 2].eValue}`));
+                this.weight[i] = new bigdecimal.BigDecimal(`${response.data.entity[0 + i * 2].eValue}.${response.data.entity[1 + i * 2].eValue}`);
               }
             }
             for (let i = 0; i < 4; i += 1) {
-              if (this.weight[0 + i * 2] === '32767' || this.weight[1 + i * 2] === '32767') {
-                this.totalWeight.push('------');
+              this.backTotalWeight[i] = this.totalWeight[i];
+              if (this.weight[4 + i] === '32767') {
+                this.totalWeight[i] = '------';
               } else {
-                this.totalWeight.push(this.weight[0 + i * 2].add(this.weight[1 + i * 2]).toString());
+                this.totalWeight[i] = this.weight[4 + i];
               }
+              this.weightChange[i] = this.backTotalWeight[i] ? this.totalWeight[i].subtract(this.backTotalWeight[i]).multiply(new bigdecimal.BigDecimal('9.9')) : '------';
+              this.leakage[i] = this.weightChange[i] === '------' ? '------' : this.weightChange[i].divide(new bigdecimal.BigDecimal('4'));
             }
           }
         })
@@ -219,7 +231,9 @@ export default {
             e10: this.bucket[6 + 4 * i].eValue,
             e11: this.bucket[7 + 4 * i].eValue,
             e12: this.top[0 + 4 * i].eValue,
-            e13: this.totalWeight[i],
+            e13: this.totalWeight[i].toString(),
+            e14: this.weightChange[i].toString(),
+            e15: this.leakage[i].toString(),
           });
         }
         for (let i = 0; i < this.checkList.length; i += 1) {
@@ -239,6 +253,9 @@ export default {
   mounted() {
     this.token = sessionStorage.getItem('token');
     this.getElementData();
+    setInterval(() => {
+      this.getElementData();
+    }, 60000);
   },
 
   computed: {
