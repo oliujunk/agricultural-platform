@@ -5,6 +5,7 @@ const Weather = () => import('@/views/weather/Weather.vue');
 const Fertilizer = () => import('@/views/fertilizer/Fertilizer.vue');
 const Lysimeter = () => import('@/views/lysimeter/Lysimeter.vue');
 const Video = () => import('@/views/video/Video.vue');
+const GIS = () => import('@/views/GIS/GIS.vue');
 
 const Container = () => import('@/views/Container.vue');
 const Login = () => import('@/views/Login.vue');
@@ -26,6 +27,7 @@ const router = new Router({
         { path: '/fertilizer', component: Fertilizer },
         { path: '/lysimeter', component: Lysimeter },
         { path: '/video', component: Video },
+        { path: '/GIS', component: GIS },
       ],
       beforeEnter: (to, from, next) => {
         const username = sessionStorage.getItem('username');

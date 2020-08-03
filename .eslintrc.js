@@ -17,7 +17,7 @@ module.exports = {
     'no-undef': 'off',
     'camelcase': 'off',
     'no-multi-assign': 'off',
-    'max-len': ['error', 200],
+    'max-len': ['error', 400],
     'global-require': 'off',
     'no-lonely-if': 'off',
     'vue/no-parsing-error': 'off',

@@ -9,6 +9,10 @@
       style="height: 100%; background-color: rgba(0, 0, 0, 0); border: 0;"
       unique-opened
     >
+      <el-menu-item index="/GIS" @click="$router.push('GIS')">
+        <i class="el-icon-s-promotion" style="font-size: 20px;"></i>
+        <span slot="title" style="letter-spacing: 15px;">GIS</span>
+      </el-menu-item>
       <el-submenu index="1">
         <template slot="title">
           <i class="icon-third-weather" style="margin-right: 8px; font-size: 14px;"></i>

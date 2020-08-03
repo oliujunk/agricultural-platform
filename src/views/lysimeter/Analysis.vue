@@ -98,6 +98,7 @@ export default {
     },
 
     handleAnalysis() {
+      this.loading = true;
       this.$http
         .get(`/datas/${this.currentDeviceId}`, {
           params: {
@@ -115,11 +116,21 @@ export default {
           const { element } = this;
           if (response.status === 200) {
             this.historys = response.data;
-            this.historys.forEach((item) => {
-              for (let i = 0, len = element.length; i < len; i += 1) {
-                item[[element[i].ch]] = accMul(item[element[i].ch], parseFloat(element[i].prec));
-              }
-            });
+            if (deviceId === 16065434) {
+              this.historys.forEach((item) => {
+                item.e1 = new bigdecimal.BigDecimal(((parseFloat(`${item.e9}.${item.e10}`) + 50) * 9.9 - 2000).toString()).setScale(2, 5).toString();
+                item.e2 = new bigdecimal.BigDecimal(((parseFloat(`${item.e11}.${item.e12}`) - 150) * 9.9 - 2000).toString()).setScale(2, 5).toString();
+                item.e3 = new bigdecimal.BigDecimal((parseFloat(`${item.e13}.${item.e14}`) * 9.9 - 2000).toString()).setScale(2, 5).toString();
+                item.e4 = new bigdecimal.BigDecimal((parseFloat(`${item.e15}.${item.e16}`) * 9.9 - 2000).toString()).setScale(2, 5).toString();
+              });
+            } else {
+              this.historys.forEach((item) => {
+                for (let i = 0, len = element.length; i < len; i += 1) {
+                  item[[element[i].ch]] = accMul(item[element[i].ch], parseFloat(element[i].prec));
+                }
+              });
+            }
+            this.loading = false;
             this.chartDraw(this.historys);
           }
         })
@@ -147,10 +158,10 @@ export default {
             this.historys.reverse();
             if (deviceId === 16065434) {
               this.historys.forEach((item) => {
-                item.e1 = new bigdecimal.BigDecimal(`${item.e9}.${item.e10}`).toString();
-                item.e2 = new bigdecimal.BigDecimal(`${item.e11}.${item.e12}`).toString();
-                item.e3 = new bigdecimal.BigDecimal(`${item.e13}.${item.e14}`).toString();
-                item.e4 = new bigdecimal.BigDecimal(`${item.e15}.${item.e16}`).toString();
+                item.e1 = new bigdecimal.BigDecimal(((parseFloat(`${item.e9}.${item.e10}`) + 50) * 9.9 - 2000).toString()).setScale(2, 5).toString();
+                item.e2 = new bigdecimal.BigDecimal(((parseFloat(`${item.e11}.${item.e12}`) - 150) * 9.9 - 2000).toString()).setScale(2, 5).toString();
+                item.e3 = new bigdecimal.BigDecimal((parseFloat(`${item.e13}.${item.e14}`) * 9.9 - 2000).toString()).setScale(2, 5).toString();
+                item.e4 = new bigdecimal.BigDecimal((parseFloat(`${item.e15}.${item.e16}`) * 9.9 - 2000).toString()).setScale(2, 5).toString();
               });
             } else {
               this.historys.forEach((item) => {

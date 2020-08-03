@@ -167,10 +167,10 @@ export default {
         flv: 'https://flvopen.ys7.com:9188/openlive/c84da35c642f4e28b77254132e2cea11.flv',
       }, {
         channel: 6,
-        flv: 'https://flvopen.ys7.com:9188/openlive/c84da35c642f4e28b77254132e2cea11.flv',
+        flv: 'https://flvopen.ys7.com:9188/openlive/e7b16a2e14e74d6789de91714f9ccae1.flv',
       }, {
         channel: 7,
-        flv: 'https://flvopen.ys7.com:9188/openlive/e7b16a2e14e74d6789de91714f9ccae1.flv',
+        flv: 'https://flvopen.ys7.com:9188/openlive/b0930a811b144f3dbf8067edadb27b4e.flv',
       }, {
         channel: 9,
         flv: 'https://flvopen.ys7.com:9188/openlive/1397b61d665e4a03b3350d8b7b800d83.flv',

@@ -24,11 +24,9 @@
               <div class="weight"></div>
               <div style="display: flex;">
                 <div class="weight-value">
-                  <span>{{weightChange[0]}} Kg</span>
+                  <span>{{totalWeight[0]}} Kg</span>
                 </div>
                 <div class="rain-value">
-                  <!-- <span v-if="top[0] === '32767'">------ mm</span>
-                  <span v-else-if="top[0]">{{top[0].eValue}} mm</span> -->
                   <span v-if="leakage[0]">{{leakage[0]}} mm</span>
                 </div>
               </div>
@@ -50,11 +48,9 @@
               <div class="weight"></div>
               <div style="display: flex;">
                 <div class="weight-value">
-                  <span>{{weightChange[1]}} Kg</span>
+                  <span>{{totalWeight[1]}} Kg</span>
                 </div>
                 <div class="rain-value">
-                  <!-- <span v-if="top[4] === '32767'">------ mm</span>
-                  <span v-else-if="top[4]">{{top[4].eValue}} mm</span> -->
                   <span v-if="leakage[1]">{{leakage[1]}} mm</span>
                 </div>
               </div>
@@ -76,11 +72,9 @@
               <div class="weight"></div>
               <div style="display: flex;">
                 <div class="weight-value">
-                  <span>{{weightChange[2]}} Kg</span>
+                  <span>{{totalWeight[2]}} Kg</span>
                 </div>
                 <div class="rain-value">
-                  <!-- <span v-if="top[8] === '32767'">------ mm</span>
-                  <span v-else-if="top[8]">{{top[8].eValue}} mm</span> -->
                   <span v-if="leakage[2]">{{leakage[2]}} mm</span>
                 </div>
               </div>
@@ -102,11 +96,9 @@
               <div class="weight"></div>
               <div style="display: flex;">
                 <div class="weight-value">
-                  <span>{{weightChange[3]}} Kg</span>
+                  <span>{{totalWeight[3]}} Kg</span>
                 </div>
                 <div class="rain-value">
-                  <!-- <span v-if="top[12] === '32767'">------ mm</span>
-                  <span v-else-if="top[12]">{{top[12].eValue}} mm</span> -->
                   <span v-if="leakage[3]">{{leakage[3]}} mm</span>
                 </div>
               </div>
@@ -129,23 +121,23 @@
             :data.sync="showDataTable"
             size="mini"
           >
-            <el-table-column prop="name" label="桶标号" align="center"></el-table-column>
+            <el-table-column prop="name" width="80" label="桶标号" align="center"></el-table-column>
             <el-table-column prop="time" width="140" label="时间" align="center"></el-table-column>
             <el-table-column prop="e13" label="重量(Kg)" align="center"></el-table-column>
-            <el-table-column prop="e14" label="重量变化(Kg)" align="center"></el-table-column>
-            <el-table-column prop="e15" label="渗漏(mm)" align="center"></el-table-column>
-            <el-table-column prop="e4" label="第一层热通量(W/m2)" align="center"></el-table-column>
-            <el-table-column prop="e5" label="第二层热通量(W/m2)" align="center"></el-table-column>
-            <el-table-column prop="e6" label="第三层热通量(W/m2)" align="center"></el-table-column>
-            <el-table-column prop="e7" label="第四层热通量(W/m2)" align="center"></el-table-column>
+            <el-table-column prop="e14" width="120" label="实时变化(Kg)" align="center"></el-table-column>
+            <el-table-column prop="e15" width="120" label="实时变化(mm)" align="center"></el-table-column>
+            <el-table-column prop="e16" label="日变化(Kg)" align="center"></el-table-column>
+            <el-table-column prop="e4" width="120" label="热通量1(W/m2)" align="center"></el-table-column>
+            <el-table-column prop="e5" label="热通量2" align="center"></el-table-column>
+            <el-table-column prop="e6" label="热通量3" align="center"></el-table-column>
+            <el-table-column prop="e7" label="热通量4" align="center"></el-table-column>
             <el-table-column prop="e1" label="土湿1(%RH)" align="center"></el-table-column>
-            <el-table-column prop="e2" label="土湿2(%RH)" align="center"></el-table-column>
-            <el-table-column prop="e3" label="土湿3(%RH)" align="center"></el-table-column>
-            <el-table-column prop="e8" label="第一层土湿(%RH)" align="center"></el-table-column>
-            <el-table-column prop="e9" label="第二层土湿(%RH)" align="center"></el-table-column>
-            <el-table-column prop="e10" label="第三层土湿(%RH)" align="center"></el-table-column>
-            <el-table-column prop="e11" label="第四层土湿(%RH)" align="center"></el-table-column>
-            <!-- <el-table-column prop="e12" label="渗漏" align="center"></el-table-column> -->
+            <el-table-column prop="e2" label="土湿2" align="center"></el-table-column>
+            <el-table-column prop="e3" label="土湿3" align="center"></el-table-column>
+            <el-table-column prop="e8" label="土湿4" align="center"></el-table-column>
+            <el-table-column prop="e9" label="土湿5" align="center"></el-table-column>
+            <el-table-column prop="e10" label="土湿6" align="center"></el-table-column>
+            <el-table-column prop="e11" label="土湿7" align="center"></el-table-column>
           </el-table>
         </div>
       </div>
@@ -161,6 +153,7 @@ export default {
 
   data() {
     return {
+      bigdecimal,
       checkList: [0, 1, 2, 3],
       dataTable: [],
       showDataTable: [],
@@ -168,13 +161,87 @@ export default {
       totalWeight: new Array(4),
       backTotalWeight: new Array(4),
       weightChange: new Array(4),
+      dailyChange: new Array(4),
       leakage: new Array(4),
       top: new Array(16),
       bucket: new Array(32),
+      fisrtWeight: new Array(4),
+      timer: null,
     };
   },
 
   methods: {
+    getTodayData() {
+      this.$http
+        .get('/todaydata/16065434', {
+          headers: {
+            token: sessionStorage.getItem('token'),
+          },
+        })
+        .then((response) => {
+          const { data } = response;
+          if (data && data.length > 0) {
+            const lastIndex = data.length - 2;
+            this.fisrtWeight[0] = `${data[0].e9}.${data[0].e10}`;
+            this.fisrtWeight[1] = `${data[0].e11}.${data[0].e12}`;
+            this.fisrtWeight[2] = `${data[0].e13}.${data[0].e14}`;
+            this.fisrtWeight[3] = `${data[0].e15}.${data[0].e16}`;
+
+            this.fisrtWeight[0] = new bigdecimal.BigDecimal(((parseFloat(this.fisrtWeight[0]) + 50) * 9.9 - 2000).toString()).setScale(2, 5);
+            this.fisrtWeight[1] = new bigdecimal.BigDecimal(((parseFloat(this.fisrtWeight[1]) - 150) * 9.9 - 2000).toString()).setScale(2, 5);
+            this.fisrtWeight[2] = new bigdecimal.BigDecimal((parseFloat(this.fisrtWeight[2]) * 9.9 - 2000).toString()).setScale(2, 5);
+            this.fisrtWeight[3] = new bigdecimal.BigDecimal((parseFloat(this.fisrtWeight[3]) * 9.9 - 2000).toString()).setScale(2, 5);
+
+            this.backTotalWeight[0] = `${data[lastIndex].e9}.${data[lastIndex].e10}`;
+            this.backTotalWeight[1] = `${data[lastIndex].e11}.${data[lastIndex].e12}`;
+            this.backTotalWeight[2] = `${data[lastIndex].e13}.${data[lastIndex].e14}`;
+            this.backTotalWeight[3] = `${data[lastIndex].e15}.${data[lastIndex].e16}`;
+
+            this.backTotalWeight[0] = new bigdecimal.BigDecimal(((parseFloat(this.backTotalWeight[0]) + 50) * 9.9 - 2000).toString()).setScale(2, 5);
+            this.backTotalWeight[1] = new bigdecimal.BigDecimal(((parseFloat(this.backTotalWeight[1]) - 150) * 9.9 - 2000).toString()).setScale(2, 5);
+            this.backTotalWeight[2] = new bigdecimal.BigDecimal((parseFloat(this.backTotalWeight[2]) * 9.9 - 2000).toString()).setScale(2, 5);
+            this.backTotalWeight[3] = new bigdecimal.BigDecimal((parseFloat(this.backTotalWeight[3]) * 9.9 - 2000).toString()).setScale(2, 5);
+
+            for (let i = 0; i < 4; i += 1) {
+              this.weightChange[i] = this.backTotalWeight[i] ? this.totalWeight[i].subtract(this.backTotalWeight[i]).setScale(3, 5) : '------';
+              this.dailyChange[i] = this.fisrtWeight[i] ? this.totalWeight[i].subtract(this.fisrtWeight[i]).setScale(3, 5) : '------';
+              this.leakage[i] = this.weightChange[i] === '------' ? '------' : this.weightChange[i].divide(new bigdecimal.BigDecimal('4')).setScale(3, 5);
+            }
+            setTimeout(() => {
+              this.dataTable = [];
+              this.showDataTable = [];
+              for (let i = 0; i < 4; i += 1) {
+                this.dataTable.push({
+                  name: `${i + 1}号桶`,
+                  time: this.top[1 + 4 * i].datetime,
+                  e1: this.top[1 + 4 * i].eValue,
+                  e2: this.top[2 + 4 * i].eValue,
+                  e3: this.top[3 + 4 * i].eValue,
+                  e4: this.bucket[0 + 8 * i].eValue,
+                  e5: this.bucket[1 + 8 * i].eValue,
+                  e6: this.bucket[2 + 8 * i].eValue,
+                  e7: this.bucket[3 + 8 * i].eValue,
+
+                  e8: this.bucket[4 + 8 * i].eValue,
+                  e9: this.bucket[5 + 8 * i].eValue,
+                  e10: this.bucket[6 + 8 * i].eValue,
+                  e11: this.bucket[7 + 8 * i].eValue,
+
+                  e12: this.top[0 + 4 * i].eValue,
+                  e13: this.totalWeight[i].toString(),
+                  e14: this.weightChange[i].toString(),
+                  e15: this.leakage[i].toString(),
+                  e16: this.dailyChange[i].toString(),
+                });
+              }
+              for (let i = 0; i < this.checkList.length; i += 1) {
+                this.showDataTable.push(this.dataTable[this.checkList[i]]);
+              }
+            }, 500);
+          }
+        })
+        .catch();
+    },
     getElementData() {
       this.$http
         .get('/intfa/queryData/16065434')
@@ -182,27 +249,35 @@ export default {
           if (response.data) {
             for (let i = 0; i < 8; i += 1) {
               if (response.data.entity[0 + i * 2].eValue === '32767' || response.data.entity[1 + i * 2].eValue === '32767') {
-                this.weight[i] = '32767';
+                this.weight[i] = '------';
               } else {
-                this.weight[i] = new bigdecimal.BigDecimal(`${response.data.entity[0 + i * 2].eValue}.${response.data.entity[1 + i * 2].eValue}`);
+                this.weight[i] = `${response.data.entity[0 + i * 2].eValue}.${response.data.entity[1 + i * 2].eValue}`;
               }
             }
             for (let i = 0; i < 4; i += 1) {
               this.backTotalWeight[i] = this.totalWeight[i];
-              if (this.weight[4 + i] === '32767') {
+              if (this.weight[4 + i] === '------') {
                 this.totalWeight[i] = '------';
               } else {
-                this.totalWeight[i] = this.weight[4 + i];
+                if (i === 0) {
+                  this.totalWeight[i] = new bigdecimal.BigDecimal(((parseFloat(this.weight[4 + i]) + 50) * 9.9 - 2000).toString()).setScale(2, 5);
+                } else if (i === 1) {
+                  this.totalWeight[i] = new bigdecimal.BigDecimal(((parseFloat(this.weight[4 + i]) - 150) * 9.9 - 2000).toString()).setScale(2, 5);
+                } else {
+                  this.totalWeight[i] = new bigdecimal.BigDecimal((parseFloat(this.weight[4 + i]) * 9.9 - 2000).toString()).setScale(2, 5);
+                }
               }
-              this.weightChange[i] = this.backTotalWeight[i] ? this.totalWeight[i].subtract(this.backTotalWeight[i]).multiply(new bigdecimal.BigDecimal('9.9')) : '------';
-              this.leakage[i] = this.weightChange[i] === '------' ? '------' : this.weightChange[i].divide(new bigdecimal.BigDecimal('4'));
+              this.weightChange[i] = this.backTotalWeight[i] ? this.totalWeight[i].subtract(this.backTotalWeight[i]).setScale(3, 5) : '------';
+              this.dailyChange[i] = this.fisrtWeight[i] ? this.totalWeight[i].subtract(this.fisrtWeight[i]).setScale(3, 5) : '------';
+              this.leakage[i] = this.weightChange[i] === '------' ? '------' : this.weightChange[i].divide(new bigdecimal.BigDecimal('4')).setScale(3, 5);
             }
           }
         })
         .catch();
       for (let i = 0; i < 4; i += 1) {
+        const deviceList = [16065432, 16065433, 16065431, 16065430];
         this.$http
-          .get(`/intfa/queryData/${16065430 + i}`)
+          .get(`/intfa/queryData/${deviceList[i]}`)
           .then((response) => {
             if (response.data) {
               this.top.splice(4 * i, 1, response.data.entity[1]);
@@ -222,18 +297,21 @@ export default {
             e1: this.top[1 + 4 * i].eValue,
             e2: this.top[2 + 4 * i].eValue,
             e3: this.top[3 + 4 * i].eValue,
-            e4: this.bucket[0 + 4 * i].eValue,
-            e5: this.bucket[1 + 4 * i].eValue,
-            e6: this.bucket[2 + 4 * i].eValue,
-            e7: this.bucket[3 + 4 * i].eValue,
-            e8: this.bucket[4 + 4 * i].eValue,
-            e9: this.bucket[5 + 4 * i].eValue,
-            e10: this.bucket[6 + 4 * i].eValue,
-            e11: this.bucket[7 + 4 * i].eValue,
+            e4: this.bucket[0 + 8 * i].eValue,
+            e5: this.bucket[1 + 8 * i].eValue,
+            e6: this.bucket[2 + 8 * i].eValue,
+            e7: this.bucket[3 + 8 * i].eValue,
+
+            e8: this.bucket[4 + 8 * i].eValue,
+            e9: this.bucket[5 + 8 * i].eValue,
+            e10: this.bucket[6 + 8 * i].eValue,
+            e11: this.bucket[7 + 8 * i].eValue,
+
             e12: this.top[0 + 4 * i].eValue,
             e13: this.totalWeight[i].toString(),
             e14: this.weightChange[i].toString(),
             e15: this.leakage[i].toString(),
+            e16: this.dailyChange[i].toString(),
           });
         }
         for (let i = 0; i < this.checkList.length; i += 1) {
@@ -253,9 +331,13 @@ export default {
   mounted() {
     this.token = sessionStorage.getItem('token');
     this.getElementData();
-    setInterval(() => {
+    this.timer = setInterval(() => {
       this.getElementData();
-    }, 60000);
+    }, 120000);
+
+    setTimeout(() => {
+      this.getTodayData();
+    }, 2000);
   },
 
   computed: {
@@ -265,6 +347,9 @@ export default {
   },
 
   beforeDestroy() {
+    if (this.timer) {
+      clearInterval(this.timer);
+    }
   },
 };
 </script>

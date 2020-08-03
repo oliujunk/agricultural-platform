@@ -51,6 +51,7 @@ module.exports = {
       };
       config.externals = {
         BMap: 'BMap',
+        AMap: 'AMap',
         echarts: 'echarts',
         flvjs: 'flv.js',
         moment: 'moment',
