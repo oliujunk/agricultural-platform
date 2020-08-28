@@ -11,6 +11,19 @@ const Container = () => import('@/views/Container.vue');
 const Login = () => import('@/views/Login.vue');
 const Home = () => import('@/views/home/Home.vue');
 
+const Weather1 = () => import('@/views/weather/Weather.vue');
+const Weather2 = () => import('@/views/weather/Weather.vue');
+const Weather3 = () => import('@/views/weather/Weather.vue');
+const Weather4 = () => import('@/views/weather/Weather.vue');
+const Weather5 = () => import('@/views/weather/Weather.vue');
+const Weather6 = () => import('@/views/weather/Weather.vue');
+const Weather7 = () => import('@/views/weather/Weather.vue');
+const Weather8 = () => import('@/views/weather/Weather.vue');
+const Weather9 = () => import('@/views/weather/Weather.vue');
+const Weather10 = () => import('@/views/weather/Weather.vue');
+const Weather11 = () => import('@/views/weather/Weather.vue');
+const Weather12 = () => import('@/views/weather/Weather.vue');
+
 Vue.use(Router);
 
 const router = new Router({
@@ -28,6 +41,18 @@ const router = new Router({
         { path: '/lysimeter', component: Lysimeter },
         { path: '/video', component: Video },
         { path: '/GIS', component: GIS },
+        { path: '/weather1', component: Weather1 },
+        { path: '/weather2', component: Weather2 },
+        { path: '/weather3', component: Weather3 },
+        { path: '/weather4', component: Weather4 },
+        { path: '/weather5', component: Weather5 },
+        { path: '/weather6', component: Weather6 },
+        { path: '/weather7', component: Weather7 },
+        { path: '/weather8', component: Weather8 },
+        { path: '/weather9', component: Weather9 },
+        { path: '/weather10', component: Weather10 },
+        { path: '/weather11', component: Weather11 },
+        { path: '/weather12', component: Weather12 },
       ],
       beforeEnter: (to, from, next) => {
         const username = sessionStorage.getItem('username');

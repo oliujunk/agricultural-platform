@@ -1,9 +1,14 @@
 import Vue from 'vue';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import 'xe-utils';
+import VXETable from 'vxe-table';
+import 'vxe-table/lib/index.css';
 
 import axios from 'axios';
 import Viewer from 'v-viewer';
+
+import VXETablePluginExportXLSX from 'vxe-table-plugin-export-xlsx';
 
 import App from '@/App.vue';
 import router from '@/router/index';
@@ -135,6 +140,8 @@ moment.locale('zh-cn', {
 });
 
 Vue.use(ElementUI);
+VXETable.use(VXETablePluginExportXLSX);
+Vue.use(VXETable);
 
 Vue.use(Viewer, {
   defaultOptions: {

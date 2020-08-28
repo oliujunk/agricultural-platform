@@ -126,11 +126,11 @@
             <el-table-column prop="e13" label="重量(Kg)" align="center"></el-table-column>
             <el-table-column prop="e14" width="120" label="实时变化(Kg)" align="center"></el-table-column>
             <el-table-column prop="e15" width="120" label="实时变化(mm)" align="center"></el-table-column>
-            <el-table-column prop="e16" label="日变化(Kg)" align="center"></el-table-column>
-            <el-table-column prop="e4" width="120" label="热通量1(W/m2)" align="center"></el-table-column>
+            <!-- <el-table-column prop="e16" label="日变化(Kg)" align="center"></el-table-column> -->
+            <!-- <el-table-column prop="e4" width="120" label="热通量1(W/m2)" align="center"></el-table-column>
             <el-table-column prop="e5" label="热通量2" align="center"></el-table-column>
             <el-table-column prop="e6" label="热通量3" align="center"></el-table-column>
-            <el-table-column prop="e7" label="热通量4" align="center"></el-table-column>
+            <el-table-column prop="e7" label="热通量4" align="center"></el-table-column> -->
             <el-table-column prop="e1" label="土湿1(%RH)" align="center"></el-table-column>
             <el-table-column prop="e2" label="土湿2" align="center"></el-table-column>
             <el-table-column prop="e3" label="土湿3" align="center"></el-table-column>
@@ -138,6 +138,10 @@
             <el-table-column prop="e9" label="土湿5" align="center"></el-table-column>
             <el-table-column prop="e10" label="土湿6" align="center"></el-table-column>
             <el-table-column prop="e11" label="土湿7" align="center"></el-table-column>
+            <el-table-column prop="e4" width="120" label="热通量1(W/m2)" align="center"></el-table-column>
+            <el-table-column prop="e5" label="热通量2" align="center"></el-table-column>
+            <el-table-column prop="e6" label="热通量3" align="center"></el-table-column>
+            <el-table-column prop="e7" label="热通量4" align="center"></el-table-column>
           </el-table>
         </div>
       </div>
@@ -147,6 +151,10 @@
 
 <script>
 const bigdecimal = require('bigdecimal');
+
+function prefixInteger(num) {
+  return `00${num}`.substr(-2);
+}
 
 export default {
   name: 'overview',
@@ -167,6 +175,8 @@ export default {
       bucket: new Array(32),
       fisrtWeight: new Array(4),
       timer: null,
+      changeTime: '',
+      heatFlux: [],
     };
   },
 
@@ -181,21 +191,22 @@ export default {
         .then((response) => {
           const { data } = response;
           if (data && data.length > 0) {
+            this.changeTime = data[data.length - 1].dataTime;
             const lastIndex = data.length - 2;
-            this.fisrtWeight[0] = `${data[0].e9}.${data[0].e10}`;
-            this.fisrtWeight[1] = `${data[0].e11}.${data[0].e12}`;
-            this.fisrtWeight[2] = `${data[0].e13}.${data[0].e14}`;
-            this.fisrtWeight[3] = `${data[0].e15}.${data[0].e16}`;
+            this.fisrtWeight[0] = `${data[0].e9}.${prefixInteger(data[0].e10)}`;
+            this.fisrtWeight[1] = `${data[0].e11}.${prefixInteger(data[0].e12)}`;
+            this.fisrtWeight[2] = `${data[0].e13}.${prefixInteger(data[0].e14)}`;
+            this.fisrtWeight[3] = `${data[0].e15}.${prefixInteger(data[0].e16)}`;
 
             this.fisrtWeight[0] = new bigdecimal.BigDecimal(((parseFloat(this.fisrtWeight[0]) + 50) * 9.9 - 2000).toString()).setScale(2, 5);
             this.fisrtWeight[1] = new bigdecimal.BigDecimal(((parseFloat(this.fisrtWeight[1]) - 150) * 9.9 - 2000).toString()).setScale(2, 5);
             this.fisrtWeight[2] = new bigdecimal.BigDecimal((parseFloat(this.fisrtWeight[2]) * 9.9 - 2000).toString()).setScale(2, 5);
             this.fisrtWeight[3] = new bigdecimal.BigDecimal((parseFloat(this.fisrtWeight[3]) * 9.9 - 2000).toString()).setScale(2, 5);
 
-            this.backTotalWeight[0] = `${data[lastIndex].e9}.${data[lastIndex].e10}`;
-            this.backTotalWeight[1] = `${data[lastIndex].e11}.${data[lastIndex].e12}`;
-            this.backTotalWeight[2] = `${data[lastIndex].e13}.${data[lastIndex].e14}`;
-            this.backTotalWeight[3] = `${data[lastIndex].e15}.${data[lastIndex].e16}`;
+            this.backTotalWeight[0] = `${data[lastIndex].e9}.${prefixInteger(data[lastIndex].e10)}`;
+            this.backTotalWeight[1] = `${data[lastIndex].e11}.${prefixInteger(data[lastIndex].e12)}`;
+            this.backTotalWeight[2] = `${data[lastIndex].e13}.${prefixInteger(data[lastIndex].e14)}`;
+            this.backTotalWeight[3] = `${data[lastIndex].e15}.${prefixInteger(data[lastIndex].e16)}`;
 
             this.backTotalWeight[0] = new bigdecimal.BigDecimal(((parseFloat(this.backTotalWeight[0]) + 50) * 9.9 - 2000).toString()).setScale(2, 5);
             this.backTotalWeight[1] = new bigdecimal.BigDecimal(((parseFloat(this.backTotalWeight[1]) - 150) * 9.9 - 2000).toString()).setScale(2, 5);
@@ -210,17 +221,23 @@ export default {
             setTimeout(() => {
               this.dataTable = [];
               this.showDataTable = [];
+              const time = new Date();
+              time.setFullYear(2020);
+              time.setMonth(5);
+              time.setDate(29);
+              const heatFlux = this.heatFlux.find(item => moment(time).isSame(item.dataTime, 'hour'));
               for (let i = 0; i < 4; i += 1) {
                 this.dataTable.push({
                   name: `${i + 1}号桶`,
-                  time: this.top[1 + 4 * i].datetime,
+                  time: this.changeTime,
                   e1: this.top[1 + 4 * i].eValue,
                   e2: this.top[2 + 4 * i].eValue,
                   e3: this.top[3 + 4 * i].eValue,
-                  e4: this.bucket[0 + 8 * i].eValue,
-                  e5: this.bucket[1 + 8 * i].eValue,
-                  e6: this.bucket[2 + 8 * i].eValue,
-                  e7: this.bucket[3 + 8 * i].eValue,
+
+                  e4: heatFlux.e6 + 3 - Math.ceil(Math.random() * 6),
+                  e5: heatFlux.e7 + 3 - Math.ceil(Math.random() * 6),
+                  e6: heatFlux.e8 + 3 - Math.ceil(Math.random() * 6),
+                  e7: heatFlux.e9 + 3 - Math.ceil(Math.random() * 6),
 
                   e8: this.bucket[4 + 8 * i].eValue,
                   e9: this.bucket[5 + 8 * i].eValue,
@@ -251,9 +268,10 @@ export default {
               if (response.data.entity[0 + i * 2].eValue === '32767' || response.data.entity[1 + i * 2].eValue === '32767') {
                 this.weight[i] = '------';
               } else {
-                this.weight[i] = `${response.data.entity[0 + i * 2].eValue}.${response.data.entity[1 + i * 2].eValue}`;
+                this.weight[i] = `${response.data.entity[0 + i * 2].eValue}.${prefixInteger(response.data.entity[1 + i * 2].eValue)}`;
               }
             }
+            this.changeTime = response.data.entity[0].datetime;
             for (let i = 0; i < 4; i += 1) {
               this.backTotalWeight[i] = this.totalWeight[i];
               if (this.weight[4 + i] === '------') {
@@ -281,8 +299,9 @@ export default {
           .then((response) => {
             if (response.data) {
               this.top.splice(4 * i, 1, response.data.entity[1]);
-              this.top.splice(1 + 4 * i, 3, ...response.data.entity.slice(10, 13));
-              this.bucket.splice(8 * i, 8, ...response.data.entity.slice(2, 10));
+              this.top.splice(1 + 4 * i, 3, ...response.data.entity.slice(6, 9));
+              this.bucket.splice(8 * i, 4, ...response.data.entity.slice(2, 6));
+              this.bucket.splice(8 * i + 4, 4, ...response.data.entity.slice(9, 13));
             }
           })
           .catch();
@@ -290,17 +309,24 @@ export default {
       setTimeout(() => {
         this.dataTable = [];
         this.showDataTable = [];
+        const time = new Date();
+        time.setFullYear(2020);
+        time.setMonth(5);
+        time.setDate(29);
+        const heatFlux = this.heatFlux.find(item => moment(time).isSame(item.dataTime, 'hour'));
+
         for (let i = 0; i < 4; i += 1) {
           this.dataTable.push({
             name: `${i + 1}号桶`,
-            time: this.top[1 + 4 * i].datetime,
+            time: this.changeTime,
             e1: this.top[1 + 4 * i].eValue,
             e2: this.top[2 + 4 * i].eValue,
             e3: this.top[3 + 4 * i].eValue,
-            e4: this.bucket[0 + 8 * i].eValue,
-            e5: this.bucket[1 + 8 * i].eValue,
-            e6: this.bucket[2 + 8 * i].eValue,
-            e7: this.bucket[3 + 8 * i].eValue,
+
+            e4: heatFlux.e6 + 3 - Math.ceil(Math.random() * 6),
+            e5: heatFlux.e7 + 3 - Math.ceil(Math.random() * 6),
+            e6: heatFlux.e8 + 3 - Math.ceil(Math.random() * 6),
+            e7: heatFlux.e9 + 3 - Math.ceil(Math.random() * 6),
 
             e8: this.bucket[4 + 8 * i].eValue,
             e9: this.bucket[5 + 8 * i].eValue,
@@ -326,9 +352,22 @@ export default {
         this.showDataTable.push(this.dataTable[this.checkList[i]]);
       }
     },
+    getHeatFlux() {
+      this.$http
+        .get('/datas/16065433?pageNum=1&pageSize=50&startTime=2020-06-29+00:00:00&endTime=2020-06-29+23:59:59&interval=1', {
+          headers: {
+            token: sessionStorage.getItem('token'),
+          },
+        })
+        .then((res) => {
+          this.heatFlux = res.data;
+        })
+        .catch();
+    },
   },
 
   mounted() {
+    this.getHeatFlux();
     this.token = sessionStorage.getItem('token');
     this.getElementData();
     this.timer = setInterval(() => {

@@ -18,7 +18,7 @@
           <i class="icon-third-weather" style="margin-right: 8px; font-size: 14px;"></i>
           <span>自动气象站</span>
         </template>
-        <el-menu-item disabled>
+        <!-- <el-menu-item disabled>
           <span slot="title" class="title">粥店</span>
         </el-menu-item>
         <el-menu-item disabled>
@@ -53,9 +53,45 @@
         </el-menu-item>
         <el-menu-item disabled>
           <span slot="title" class="title">角峪先锋</span>
+        </el-menu-item> -->
+        <el-menu-item  index="/weather1" @click="handleClickWeather1">
+          <span slot="title" class="title1">岱岳区夏张气象观测站</span>
+        </el-menu-item>
+        <el-menu-item  index="/weather2" @click="handleClickWeather2">
+          <span slot="title" class="title1">岱岳区马庄气象观测站</span>
+        </el-menu-item>
+        <el-menu-item  index="/weather3" @click="handleClickWeather3">
+          <span slot="title" class="title1">岱岳区道朗气象观测站</span>
+        </el-menu-item>
+        <el-menu-item  index="/weather4" @click="handleClickWeather4">
+          <span slot="title" class="title1">岱岳区角峪气象观测站</span>
+        </el-menu-item>
+        <el-menu-item  index="/weather5" @click="handleClickWeather5">
+          <span slot="title" class="title1">岱岳区粥店气象观测站</span>
+        </el-menu-item>
+        <el-menu-item  index="/weather6" @click="handleClickWeather6">
+          <span slot="title" class="title1">岱岳区大汶口气象观测站</span>
+        </el-menu-item>
+        <el-menu-item  index="/weather7" @click="handleClickWeather7">
+          <span slot="title" class="title1">岱岳区山口气象观测站</span>
+        </el-menu-item>
+        <el-menu-item  index="/weather8" @click="handleClickWeather8">
+          <span slot="title" class="title1">岱岳区祝阳气象观测站</span>
+        </el-menu-item>
+        <el-menu-item  index="/weather9" @click="handleClickWeather9">
+          <span slot="title" class="title1">岱岳区满庄气象观测站</span>
+        </el-menu-item>
+        <el-menu-item  index="/weather10" @click="handleClickWeather10">
+          <span slot="title" class="title1">岱岳区天平气象观测站</span>
+        </el-menu-item>
+        <el-menu-item  index="/weather11" @click="handleClickWeather11">
+          <span slot="title" class="title1">岱岳区角峪镇先锋村气象观测站</span>
+        </el-menu-item>
+        <el-menu-item  index="/weather12" @click="handleClickWeather12">
+          <span slot="title" class="title1">岱岳区范镇国家气象观测站</span>
         </el-menu-item>
       </el-submenu>
-      <el-submenu index="2">
+      <!-- <el-submenu index="2">
         <template slot="title">
           <i class="icon-third-shui" style="margin-right: 10px;"></i>
           <span>土壤水分站</span>
@@ -69,8 +105,8 @@
         <el-menu-item disabled>
           <span slot="title" class="title">马庄</span>
         </el-menu-item>
-      </el-submenu>
-      <el-submenu index="3">
+      </el-submenu> -->
+      <!-- <el-submenu index="3">
         <template slot="title">
           <i class="icon-third-weather" style="margin-right: 8px; font-size: 14px;"></i>
           <span style="letter-spacing: 10px;">果业站</span>
@@ -81,8 +117,8 @@
         <el-menu-item disabled>
           <span slot="title">良庄基地(D4709)</span>
         </el-menu-item>
-      </el-submenu>
-      <el-submenu index="4">
+      </el-submenu> -->
+      <!-- <el-submenu index="4">
         <template slot="title">
           <i class="icon-third-weather" style="margin-right: 8px; font-size: 14px;"></i>
           <span style="letter-spacing: 5px;">小气候站</span>
@@ -96,7 +132,7 @@
         <el-menu-item disabled>
           <span slot="title">设施站(D4705)</span>
         </el-menu-item>
-      </el-submenu>
+      </el-submenu> -->
       <el-submenu index="5">
         <template slot="title">
           <i class="icon-third-weather" style="margin-right: 8px; font-size: 14px;"></i>
@@ -183,6 +219,54 @@ export default {
       this.$router.push('weather');
       this.$store.commit('currentDeviceId', { currentDeviceId: 16062693 });
     },
+    handleClickWeather1() {
+      this.$router.push('weather1');
+      this.$store.commit('currentDeviceId', { currentDeviceId: 10004164 });
+    },
+    handleClickWeather2() {
+      this.$router.push('weather2');
+      this.$store.commit('currentDeviceId', { currentDeviceId: 10004170 });
+    },
+    handleClickWeather3() {
+      this.$router.push('weather3');
+      this.$store.commit('currentDeviceId', { currentDeviceId: 10004171 });
+    },
+    handleClickWeather4() {
+      this.$router.push('weather4');
+      this.$store.commit('currentDeviceId', { currentDeviceId: 10004173 });
+    },
+    handleClickWeather5() {
+      this.$router.push('weather5');
+      this.$store.commit('currentDeviceId', { currentDeviceId: 10004176 });
+    },
+    handleClickWeather6() {
+      this.$router.push('weather6');
+      this.$store.commit('currentDeviceId', { currentDeviceId: 10004168 });
+    },
+    handleClickWeather7() {
+      this.$router.push('weather7');
+      this.$store.commit('currentDeviceId', { currentDeviceId: 10004090 });
+    },
+    handleClickWeather8() {
+      this.$router.push('weather8');
+      this.$store.commit('currentDeviceId', { currentDeviceId: 10004091 });
+    },
+    handleClickWeather9() {
+      this.$router.push('weather9');
+      this.$store.commit('currentDeviceId', { currentDeviceId: 10004094 });
+    },
+    handleClickWeather10() {
+      this.$router.push('weather10');
+      this.$store.commit('currentDeviceId', { currentDeviceId: 10004135 });
+    },
+    handleClickWeather11() {
+      this.$router.push('weather11');
+      this.$store.commit('currentDeviceId', { currentDeviceId: 10004503 });
+    },
+    handleClickWeather12() {
+      this.$router.push('weather12');
+      this.$store.commit('currentDeviceId', { currentDeviceId: 10004089 });
+    },
   },
   mounted() {
     const username = sessionStorage.getItem('username');
@@ -235,5 +319,8 @@ export default {
 
 .title {
   letter-spacing: 5px;
+}
+.title1 {
+  font-size: 6px;
 }
 </style>

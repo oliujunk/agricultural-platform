@@ -30,43 +30,44 @@
             size="mini"
           >{{$t('search.select.search')}}
           </el-button>
-          <el-tooltip :content="$t('search.exportTooltip')">
-            <el-button
-              type="primary"
-              icon="el-icon-download"
-              @click="handleExport(element)"
-              size="mini"
-            >{{$t('search.select.export')}}
-            </el-button>
-          </el-tooltip>
+          <el-button
+            type="primary"
+            icon="el-icon-download"
+            @click="exportDataEvent"
+            size="mini"
+          >{{$t('search.select.export')}}
+          </el-button>
         </div>
-        <div class="search-table">
-          <el-table
+        <div>
+          <vxe-table
             :data.sync="historys"
             size="mini"
+            align="center"
+            ref="historyTable"
+            height="660"
+            :loading="tableLoading"
           >
-            <el-table-column
+            <vxe-table-column
               fixed
-              prop="dataTime"
+              field="dataTime"
               width="150"
-              :label="$t('date')"
-              align="center"
-            ></el-table-column>
-            <el-table-column
+              :title="$t('date')"
+            ></vxe-table-column>
+            <vxe-table-column
               v-for="(item, index) in element"
               :key="index"
-              :prop="item.ch"
-              :label="`${item.name}\n(${item.unit})`"
-              min-width="90"
-              show-overflow-tooltip
-              align="center"
-            ></el-table-column>
-          </el-table>
+              :field="item.ch"
+              :title="`${item.name}\n(${item.unit})`"
+            ></vxe-table-column>
+          </vxe-table>
+        </div>
+        <div class="pagination">
           <el-pagination
             background
-            layout="total, prev, pager, next, jumper"
+            layout="sizes, total, prev, pager, next, jumper"
             :total="total"
             :page-size="pageSize"
+            :page-sizes="[100, 200, 500, 1000]"
             :current-page.sync="currentPage"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
@@ -106,6 +107,10 @@ const accMul = (arg1, arg2) => {
   return null;
 };
 
+function prefixInteger(num) {
+  return `00${num}`.substr(-2);
+}
+
 export default {
   name: 'search',
   data() {
@@ -114,8 +119,8 @@ export default {
       searchReady: false,
       searchMode: 'default',
       historys: [],
-      pageSize: 17,
-      interval: 1,
+      pageSize: 100,
+      interval: 5,
       dateRange: [],
       tableLoading: false,
       total: 0,
@@ -152,6 +157,7 @@ export default {
           params: {
             pageNum,
             pageSize,
+            interval: this.interval,
           },
           headers: {
             token: sessionStorage.getItem('token'),
@@ -160,14 +166,36 @@ export default {
         .then((response) => {
           const { element } = this;
           if (response.status === 200) {
-            this.historys = response.data;
+            this.historys = response.data.reverse();
             if (deviceId === 16065434) {
+              const backupData = new Array(4);
+              backupData[0] = new bigdecimal.BigDecimal('0');
+              backupData[1] = new bigdecimal.BigDecimal('0');
+              backupData[2] = new bigdecimal.BigDecimal('0');
+              backupData[3] = new bigdecimal.BigDecimal('0');
               this.historys.forEach((item) => {
-                item.e1 = new bigdecimal.BigDecimal(((parseFloat(`${item.e9}.${item.e10}`) + 50) * 9.9 - 2000).toString()).setScale(2, 5).toString();
-                item.e2 = new bigdecimal.BigDecimal(((parseFloat(`${item.e11}.${item.e12}`) - 150) * 9.9 - 2000).toString()).setScale(2, 5).toString();
-                item.e3 = new bigdecimal.BigDecimal((parseFloat(`${item.e13}.${item.e14}`) * 9.9 - 2000).toString()).setScale(2, 5).toString();
-                item.e4 = new bigdecimal.BigDecimal((parseFloat(`${item.e15}.${item.e16}`) * 9.9 - 2000).toString()).setScale(2, 5).toString();
+                item.e1 = new bigdecimal.BigDecimal(((parseFloat(`${item.e9}.${prefixInteger(item.e10)}`) + 50) * 9.9 - 2000).toString());
+                item.e2 = new bigdecimal.BigDecimal(((parseFloat(`${item.e11}.${prefixInteger(item.e12)}`) - 150) * 9.9 - 2000).toString());
+                item.e3 = new bigdecimal.BigDecimal((parseFloat(`${item.e13}.${prefixInteger(item.e14)}`) * 9.9 - 2000).toString());
+                item.e4 = new bigdecimal.BigDecimal((parseFloat(`${item.e15}.${prefixInteger(item.e16)}`) * 9.9 - 2000).toString());
+                item.e5 = item.e1.subtract(backupData[0]).setScale(3, 5).toString();
+                item.e6 = item.e2.subtract(backupData[1]).setScale(3, 5).toString();
+                item.e7 = item.e3.subtract(backupData[2]).setScale(3, 5).toString();
+                item.e8 = item.e4.subtract(backupData[3]).setScale(3, 5).toString();
+                backupData[0] = item.e1;
+                backupData[1] = item.e2;
+                backupData[2] = item.e3;
+                backupData[3] = item.e4;
+                item.e1 = item.e1.setScale(2, 5).toString();
+                item.e2 = item.e2.setScale(2, 5).toString();
+                item.e3 = item.e3.setScale(2, 5).toString();
+                item.e4 = item.e4.setScale(2, 5).toString();
               });
+              this.historys[0].e5 = '0.000';
+              this.historys[0].e6 = '0.000';
+              this.historys[0].e7 = '0.000';
+              this.historys[0].e8 = '0.000';
+              this.historys.reverse();
             } else {
               this.historys.forEach((item) => {
                 for (let i = 0, len = element.length; i < len; i += 1) {
@@ -280,10 +308,17 @@ export default {
                 detail.ch = `e${i + 1}`;
                 detail.unit = 'Kg';
                 element.push(detail);
+
+                const detail1 = {};
+                detail1.name = `变化量${i + 1}`;
+                detail1.ch = `e${i + 5}`;
+                detail1.unit = 'Kg';
+                element.push(detail1);
               }
             } else {
               for (let i = 0; i < 16; i += 1) {
                 if (eleNum[i] === '100') continue;
+                if (i >= 5 && i <= 8) continue;
                 const detail = this.getDetail(eleNum[i]);
                 if (eleName[i] !== '-') {
                   detail.name = eleName[i];
@@ -363,6 +398,14 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+
+    exportDataEvent() {
+      this.$refs.historyTable.exportData({
+        filename: `${this.currentDeviceId}_${moment().format('YYYY-MM-DD HH:mm:ss')}`,
+        sheetName: 'Sheet1',
+        type: 'xlsx',
+      });
     },
   },
 
@@ -461,6 +504,38 @@ export default {
   height: 0;
 }
 
+.vxe-table {
+  background-color: transparent;
+}
+
+.vxe-table >>> th {
+  background-color: rgba(0, 0, 0, 0.2)!important;
+  color: white;
+}
+.vxe-table >>> tr {
+  border: 0;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.3)!important;
+}
+.vxe-table >>> tr:hover td {
+  background-color: transparent;
+}
+.vxe-table >>> tr:nth-child(2n+1) {
+  background-color: rgba(0, 0, 0, 0.1)!important;
+}
+
+.vxe-table >>> .vxe-table--body-wrapper {
+  background-color: transparent;
+}
+
+.vxe-table >>> td {
+  border: 0;
+}
+.vxe-table >>>.vxe-table__fixed::before {
+  height: 0;
+}
+
+
 .el-pagination {
   background: transparent;
 }
@@ -486,5 +561,4 @@ export default {
   color: white!important;
   background: transparent;
 }
-
 </style>

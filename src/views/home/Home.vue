@@ -726,7 +726,7 @@ export default {
         const video1 = document.getElementById('video1');
         const flvPlayer1 = flvjs.createPlayer({
           type: 'flv',
-          url: 'https://flvopen.ys7.com:9188/openlive/875dd26d043a43419b87fb4659bf31c9.flv', // 1
+          url: 'https://flvopen.ys7.com:9188/openlive/89f4f933c4db4733950deb8ffd0adf40.flv', // 14
         });
         flvPlayer1.attachMediaElement(video1);
         flvPlayer1.load();
@@ -735,7 +735,7 @@ export default {
         const video2 = document.getElementById('video2');
         const flvPlayer2 = flvjs.createPlayer({
           type: 'flv',
-          url: 'https://flvopen.ys7.com:9188/openlive/e7b16a2e14e74d6789de91714f9ccae1.hd.flv', // 6
+          url: 'https://flvopen.ys7.com:9188/openlive/1bc373316ab842dcbfb6500b82397048.flv', // 12
         });
         flvPlayer2.attachMediaElement(video2);
         flvPlayer2.load();
@@ -753,7 +753,7 @@ export default {
         const video4 = document.getElementById('video4');
         const flvPlayer4 = flvjs.createPlayer({
           type: 'flv',
-          url: 'https://flvopen.ys7.com:9188/openlive/034a740930cf4722ac7569d9236eefdf.flv', // 18
+          url: 'https://flvopen.ys7.com:9188/openlive/408ad501ce8e40858dbff211ee79ce07.flv', // 10
         });
         flvPlayer4.attachMediaElement(video4);
         flvPlayer4.load();
