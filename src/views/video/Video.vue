@@ -154,8 +154,8 @@ export default {
   data() {
     return {
       videoList: [{
-        channel: 17,
-        flv: 'https://flvopen.ys7.com:9188/openlive/e38f93f52d9d4dc29abb21a035d800dc.flv',
+        channel: 15,
+        flv: 'https://flvopen.ys7.com:9188/openlive/3e5ea27a10c8432788c699f9da0d2dbb.flv',
       }, {
         channel: 12,
         flv: 'https://flvopen.ys7.com:9188/openlive/1bc373316ab842dcbfb6500b82397048.flv',
@@ -172,14 +172,14 @@ export default {
         channel: 1,
         flv: 'https://flvopen.ys7.com:9188/openlive/875dd26d043a43419b87fb4659bf31c9.flv',
       }, {
-        channel: 14,
-        flv: 'https://flvopen.ys7.com:9188/openlive/89f4f933c4db4733950deb8ffd0adf40.flv',
-      }, {
-        channel: 12,
-        flv: 'https://flvopen.ys7.com:9188/openlive/1bc373316ab842dcbfb6500b82397048.flv',
-      }, {
         channel: 17,
         flv: 'https://flvopen.ys7.com:9188/openlive/e38f93f52d9d4dc29abb21a035d800dc.flv',
+      }, {
+        channel: 3,
+        flv: 'https://flvopen.ys7.com:9188/openlive/37dc3bb2e834497280293a778a1133ab.flv',
+      }, {
+        channel: 5,
+        flv: 'https://flvopen.ys7.com:9188/openlive/c84da35c642f4e28b77254132e2cea11.flv',
       }],
     };
   },

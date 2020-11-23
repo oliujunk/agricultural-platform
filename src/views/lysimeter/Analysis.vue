@@ -122,10 +122,10 @@ export default {
             this.historys = response.data;
             if (deviceId === 16065434) {
               this.historys.forEach((item) => {
-                item.e1 = new bigdecimal.BigDecimal(((parseFloat(`${item.e9}.${prefixInteger(item.e10)}`) + 50) * 9.9 - 2000).toString()).setScale(2, 5).toString();
-                item.e2 = new bigdecimal.BigDecimal(((parseFloat(`${item.e11}.${prefixInteger(item.e12)}`) - 150) * 9.9 - 2000).toString()).setScale(2, 5).toString();
-                item.e3 = new bigdecimal.BigDecimal((parseFloat(`${item.e13}.${prefixInteger(item.e14)}`) * 9.9 - 2000).toString()).setScale(2, 5).toString();
-                item.e4 = new bigdecimal.BigDecimal((parseFloat(`${item.e15}.${prefixInteger(item.e16)}`) * 9.9 - 2000).toString()).setScale(2, 5).toString();
+                item.e1 = new bigdecimal.BigDecimal((parseFloat(`${item.e9}.${prefixInteger(item.e10)}`) * 9.9 - 1700).toString()).setScale(2, 5).toString();
+                item.e2 = new bigdecimal.BigDecimal((parseFloat(`${item.e11}.${prefixInteger(item.e12)}`) * 9.9 - 2600).toString()).setScale(2, 5).toString();
+                item.e3 = new bigdecimal.BigDecimal((parseFloat(`${item.e13}.${prefixInteger(item.e14)}`) * 9.9 - 1800).toString()).setScale(2, 5).toString();
+                item.e4 = new bigdecimal.BigDecimal((parseFloat(`${item.e15}.${prefixInteger(item.e16)}`) * 9.9 - 330).toString()).setScale(2, 5).toString();
               });
             } else {
               this.historys.forEach((item) => {
@@ -162,10 +162,10 @@ export default {
             this.historys.reverse();
             if (deviceId === 16065434) {
               this.historys.forEach((item) => {
-                item.e1 = new bigdecimal.BigDecimal(((parseFloat(`${item.e9}.${item.e10}`) + 50) * 9.9 - 2000).toString()).setScale(2, 5).toString();
-                item.e2 = new bigdecimal.BigDecimal(((parseFloat(`${item.e11}.${item.e12}`) - 150) * 9.9 - 2000).toString()).setScale(2, 5).toString();
-                item.e3 = new bigdecimal.BigDecimal((parseFloat(`${item.e13}.${item.e14}`) * 9.9 - 2000).toString()).setScale(2, 5).toString();
-                item.e4 = new bigdecimal.BigDecimal((parseFloat(`${item.e15}.${item.e16}`) * 9.9 - 2000).toString()).setScale(2, 5).toString();
+                item.e1 = new bigdecimal.BigDecimal((parseFloat(`${item.e9}.${item.e10}`) * 9.9 - 1700).toString()).setScale(2, 5).toString();
+                item.e2 = new bigdecimal.BigDecimal((parseFloat(`${item.e11}.${item.e12}`) * 9.9 - 2600).toString()).setScale(2, 5).toString();
+                item.e3 = new bigdecimal.BigDecimal((parseFloat(`${item.e13}.${item.e14}`) * 9.9 - 1800).toString()).setScale(2, 5).toString();
+                item.e4 = new bigdecimal.BigDecimal((parseFloat(`${item.e15}.${item.e16}`) * 9.9 - 330).toString()).setScale(2, 5).toString();
               });
             } else {
               this.historys.forEach((item) => {

@@ -198,20 +198,20 @@ export default {
             this.fisrtWeight[2] = `${data[0].e13}.${prefixInteger(data[0].e14)}`;
             this.fisrtWeight[3] = `${data[0].e15}.${prefixInteger(data[0].e16)}`;
 
-            this.fisrtWeight[0] = new bigdecimal.BigDecimal(((parseFloat(this.fisrtWeight[0]) + 50) * 9.9 - 2000).toString()).setScale(2, 5);
-            this.fisrtWeight[1] = new bigdecimal.BigDecimal(((parseFloat(this.fisrtWeight[1]) - 150) * 9.9 - 2000).toString()).setScale(2, 5);
-            this.fisrtWeight[2] = new bigdecimal.BigDecimal((parseFloat(this.fisrtWeight[2]) * 9.9 - 2000).toString()).setScale(2, 5);
-            this.fisrtWeight[3] = new bigdecimal.BigDecimal((parseFloat(this.fisrtWeight[3]) * 9.9 - 2000).toString()).setScale(2, 5);
+            this.fisrtWeight[0] = new bigdecimal.BigDecimal((parseFloat(this.fisrtWeight[0]) * 9.9 - 1700).toString()).setScale(2, 5);
+            this.fisrtWeight[1] = new bigdecimal.BigDecimal((parseFloat(this.fisrtWeight[1]) * 9.9 - 2600).toString()).setScale(2, 5);
+            this.fisrtWeight[2] = new bigdecimal.BigDecimal((parseFloat(this.fisrtWeight[2]) * 9.9 - 1800).toString()).setScale(2, 5);
+            this.fisrtWeight[3] = new bigdecimal.BigDecimal((parseFloat(this.fisrtWeight[3]) * 9.9 - 330).toString()).setScale(2, 5);
 
             this.backTotalWeight[0] = `${data[lastIndex].e9}.${prefixInteger(data[lastIndex].e10)}`;
             this.backTotalWeight[1] = `${data[lastIndex].e11}.${prefixInteger(data[lastIndex].e12)}`;
             this.backTotalWeight[2] = `${data[lastIndex].e13}.${prefixInteger(data[lastIndex].e14)}`;
             this.backTotalWeight[3] = `${data[lastIndex].e15}.${prefixInteger(data[lastIndex].e16)}`;
 
-            this.backTotalWeight[0] = new bigdecimal.BigDecimal(((parseFloat(this.backTotalWeight[0]) + 50) * 9.9 - 2000).toString()).setScale(2, 5);
-            this.backTotalWeight[1] = new bigdecimal.BigDecimal(((parseFloat(this.backTotalWeight[1]) - 150) * 9.9 - 2000).toString()).setScale(2, 5);
-            this.backTotalWeight[2] = new bigdecimal.BigDecimal((parseFloat(this.backTotalWeight[2]) * 9.9 - 2000).toString()).setScale(2, 5);
-            this.backTotalWeight[3] = new bigdecimal.BigDecimal((parseFloat(this.backTotalWeight[3]) * 9.9 - 2000).toString()).setScale(2, 5);
+            this.backTotalWeight[0] = new bigdecimal.BigDecimal((parseFloat(this.backTotalWeight[0]) * 9.9 - 1700).toString()).setScale(2, 5);
+            this.backTotalWeight[1] = new bigdecimal.BigDecimal((parseFloat(this.backTotalWeight[1]) * 9.9 - 2600).toString()).setScale(2, 5);
+            this.backTotalWeight[2] = new bigdecimal.BigDecimal((parseFloat(this.backTotalWeight[2]) * 9.9 - 1800).toString()).setScale(2, 5);
+            this.backTotalWeight[3] = new bigdecimal.BigDecimal((parseFloat(this.backTotalWeight[3]) * 9.9 - 330).toString()).setScale(2, 5);
 
             for (let i = 0; i < 4; i += 1) {
               this.weightChange[i] = this.backTotalWeight[i] ? this.totalWeight[i].subtract(this.backTotalWeight[i]).setScale(3, 5) : '------';
@@ -278,11 +278,13 @@ export default {
                 this.totalWeight[i] = '------';
               } else {
                 if (i === 0) {
-                  this.totalWeight[i] = new bigdecimal.BigDecimal(((parseFloat(this.weight[4 + i]) + 50) * 9.9 - 2000).toString()).setScale(2, 5);
+                  this.totalWeight[i] = new bigdecimal.BigDecimal((parseFloat(this.weight[4 + i]) * 9.9 - 1700).toString()).setScale(2, 5);
                 } else if (i === 1) {
-                  this.totalWeight[i] = new bigdecimal.BigDecimal(((parseFloat(this.weight[4 + i]) - 150) * 9.9 - 2000).toString()).setScale(2, 5);
+                  this.totalWeight[i] = new bigdecimal.BigDecimal(((parseFloat(this.weight[4 + i])) * 9.9 - 2600).toString()).setScale(2, 5);
+                } else if (i === 2) {
+                  this.totalWeight[i] = new bigdecimal.BigDecimal(((parseFloat(this.weight[4 + i])) * 9.9 - 1800).toString()).setScale(2, 5);
                 } else {
-                  this.totalWeight[i] = new bigdecimal.BigDecimal((parseFloat(this.weight[4 + i]) * 9.9 - 2000).toString()).setScale(2, 5);
+                  this.totalWeight[i] = new bigdecimal.BigDecimal((parseFloat(this.weight[4 + i]) * 9.9 - 330).toString()).setScale(2, 5);
                 }
               }
               this.weightChange[i] = this.backTotalWeight[i] ? this.totalWeight[i].subtract(this.backTotalWeight[i]).setScale(3, 5) : '------';
